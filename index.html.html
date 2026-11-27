@@ -1,0 +1,4211 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>呷嘎的秘密偶像公主排拆系統</title>
+  <style>
+    :root {
+      --bg-pink: #fff5f9;
+      --bg-lavender: #f5f0ff;
+      --card-white: rgba(255, 255, 255, 0.94);
+      --pink-deep: #d81b60;
+      --purple-deep: #7b1fa2;
+      --blue-bind: #1565c0;
+      --red-vip: #d50000;
+      --purple-buyer: #6a1b9a;
+      --text-main: #3e2747;
+      --text-muted: #7c6685;
+      --border-soft: #f3d6e4;
+      --shadow-soft: 0 10px 28px rgba(186, 104, 200, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at 12% 10%, #ffe4ef 0%, transparent 38%),
+        radial-gradient(circle at 88% 15%, #e8dcff 0%, transparent 40%),
+        radial-gradient(circle at 50% 95%, #e1f5fe 0%, transparent 45%),
+        linear-gradient(160deg, var(--bg-pink), var(--bg-lavender));
+      min-height: 100vh;
+      padding-bottom: 92px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(12px);
+      background: rgba(255, 250, 253, 0.9);
+      border-bottom: 1.5px solid var(--border-soft);
+      padding: 12px 16px;
+    }
+
+    .header-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 10px; }
+
+    .brand-badge {
+      background: linear-gradient(135deg, #ff9ec4, #c5a3ff);
+      color: #fff;
+      font-weight: 800;
+      padding: 8px 12px;
+      border-radius: 16px;
+      font-size: 15px;
+      box-shadow: 0 4px 12px rgba(216, 27, 96, 0.2);
+    }
+
+    .brand h1 { margin: 0; font-size: 17px; font-weight: 800; }
+    .brand small { display: block; font-size: 12px; color: var(--text-muted); }
+
+    .pool-tabs { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+
+    .pool-tab {
+      border: 1.5px solid #e6c7f5;
+      background: #fff;
+      color: var(--purple-deep);
+      padding: 6px 13px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .pool-tab.active {
+      background: linear-gradient(135deg, #ff80ab, #b388ff);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(179, 136, 255, 0.35);
+    }
+
+    .nav-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+    .sync-pill {
+      font-size: 12px;
+      font-weight: 800;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #fff3f8;
+      color: var(--pink-deep);
+      border: 1px solid #f4b8d1;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 14px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn:hover { filter: brightness(0.98); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #ff7eb3, #a685ff);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(255, 126, 179, 0.3);
+    }
+
+    .btn-soft {
+      background: #fff;
+      color: var(--text-main);
+      border: 1.5px solid var(--border-soft);
+    }
+
+    .btn-danger {
+      background: #ffebee;
+      color: #c62828;
+      border: 1px solid #ffcdd2;
+    }
+
+    .btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 10px; }
+
+    .unread-badge {
+      background: #ff1744;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 1px 6px;
+      border-radius: 999px;
+      line-height: 1.3;
+    }
+
+    .container { max-width: 1180px; margin: 16px auto; padding: 0 14px; }
+
+    .top-banner {
+      background: var(--card-white);
+      border: 1.5px solid var(--border-soft);
+      border-radius: 22px;
+      padding: 14px 18px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      align-items: center;
+    }
+
+    .stat-box {
+      background: linear-gradient(135deg, #fff8fb, #f8f3ff);
+      border-radius: 16px;
+      padding: 10px 14px;
+      border: 1px solid #f4dff0;
+    }
+
+    .stat-label { font-size: 12px; color: var(--text-muted); }
+    .stat-val { font-size: 18px; font-weight: 800; margin-top: 2px; }
+
+    .progress-wrap {
+      width: 100%;
+      height: 10px;
+      background: #fce4ec;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #ff80ab, #b388ff, #80deea);
+      transition: width 0.3s ease;
+    }
+
+    .mode-switch { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+
+    .mode-btn {
+      padding: 9px 16px;
+      border-radius: 16px;
+      border: 1.5px solid #e7c9f6;
+      background: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .mode-btn.active {
+      background: linear-gradient(135deg, #ff80ab, #ce93d8);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .rules-card, .box-card {
+      background: var(--card-white);
+      border: 1.5px solid var(--border-soft);
+      border-radius: 22px;
+      padding: 16px 18px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 16px;
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 10px;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .rule-pill {
+      background: #fff9fc;
+      border: 1px dashed #f4a7c4;
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+
+    .contact-strip {
+      margin-top: 10px;
+      background: linear-gradient(135deg, #fff3f8, #f6efff);
+      border: 1.5px solid #e8c9f7;
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .set-banner {
+      background: #fff;
+      border: 1.5px solid #ebd2f8;
+      border-radius: 20px;
+      padding: 12px 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .set-banner img {
+      width: 100%;
+      max-height: 460px;
+      object-fit: contain;
+      border-radius: 14px;
+      background: #fff8fc;
+      margin-top: 8px;
+      border: 1px solid #f4e1ee;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+      align-items: center;
+    }
+
+    .filter-chip {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1.5px solid #ebd2f8;
+      background: #fff;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--purple-deep);
+    }
+
+    .filter-chip.active { background: #9c27b0; color: #fff; border-color: #9c27b0; }
+
+    .search-input {
+      padding: 7px 12px;
+      border-radius: 12px;
+      border: 1.5px solid #e7c9f6;
+      background: #fff;
+      font-size: 13px;
+      min-width: 180px;
+    }
+
+    .buyer-bar {
+      background: var(--card-white);
+      border: 1.5px solid var(--border-soft);
+      border-radius: 20px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .buyer-identity { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+
+    .buyer-identity input, .buyer-identity select {
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1.5px solid #dfb8f2;
+      font-size: 13px;
+      background: #fff;
+    }
+
+    .phone-status {
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-top: 3px;
+      display: block;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: 14px;
+    }
+
+    .idol-card {
+      position: relative;
+      background: #fff;
+      border-radius: 20px;
+      border: 2px solid #f6d8e8;
+      padding: 10px;
+      box-shadow: 0 6px 18px rgba(171, 130, 196, 0.12);
+      cursor: pointer;
+      transition: transform 0.16s, border-color 0.16s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .idol-card:hover { transform: translateY(-3px); }
+
+    .idol-card.selected {
+      border-color: #ff4081;
+      background: linear-gradient(180deg, #fff5f9, #f9f2ff);
+      box-shadow: 0 0 0 3px rgba(255, 64, 129, 0.18);
+    }
+
+    .idol-card.has-queue { border-color: #d1c4e9; }
+
+    .star-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      z-index: 2;
+      background: linear-gradient(135deg, #ffd54f, #ff8a65);
+      color: #4a148c;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+
+    .qty-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1.5px solid #e1bee7;
+      color: #6a1b9a;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 999px;
+    }
+
+    .card-thumb {
+      width: 100%;
+      min-height: 118px;
+      border-radius: 14px;
+      background: linear-gradient(145deg, #ffeef5, #efe8ff, #e3f7ff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 26px 8px 10px;
+      border: 1px solid #f4e1ee;
+    }
+
+    .card-code {
+      font-size: 11px;
+      font-weight: 800;
+      color: #9c27b0;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 2px 7px;
+      border-radius: 8px;
+      margin-bottom: 4px;
+    }
+
+    .card-name { font-size: 12.5px; font-weight: 800; line-height: 1.3; }
+
+    .same-demand-pill {
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #7b1fa2;
+      background: #f3e5f5;
+      padding: 2px 7px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+      gap: 4px;
+    }
+
+    .price-moon { font-size: 14px; font-weight: 900; color: var(--pink-deep); }
+
+    .bind-blue {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--blue-bind);
+      background: #e3f2fd;
+      padding: 2px 6px;
+      border-radius: 8px;
+    }
+
+    .queue-codes {
+      margin-top: 7px;
+      padding-top: 6px;
+      border-top: 1px dashed #f2d4e6;
+      min-height: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .code-tag {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: #faf5ff;
+      border: 1px solid #e1bee7;
+    }
+
+    .code-red { color: var(--red-vip); border-color: #ef9a9a; background: #ffebee; }
+    .code-purple { color: var(--purple-buyer); }
+
+    /* 底部固定列（手機版也保留查單與聊天室入口） */
+    .cart-dock {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 45;
+      background: rgba(255, 252, 254, 0.96);
+      backdrop-filter: blur(12px);
+      border-top: 1.5px solid #f4b8d1;
+      box-shadow: 0 -6px 20px rgba(186, 104, 200, 0.16);
+      padding: 6px 12px;
+    }
+
+    .cart-dock-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .cart-summary {
+      font-size: 12.5px;
+      font-weight: 700;
+      line-height: 1.3;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cart-summary strong { color: var(--pink-deep); font-size: 14.5px; }
+
+    .cart-dock-actions {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 680px) {
+      body { padding-bottom: 72px; }
+      .cart-dock { padding: 5px 8px; }
+      .cart-dock-inner { gap: 5px; }
+      .cart-summary { font-size: 11px; }
+      .cart-summary strong { font-size: 13px; }
+      .cart-dock-actions .btn { padding: 5px 7px; font-size: 11.5px; border-radius: 10px; }
+    }
+
+    .admin-section {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed #e6c7f5;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .contact-form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .contact-form-grid input, .contact-form-grid textarea {
+      width: 100%;
+      padding: 8px 11px;
+      border-radius: 10px;
+      border: 1.5px solid #dfb8f2;
+      font-size: 13px;
+      background: #fff;
+    }
+
+    .won-card-chip {
+      display: inline-block;
+      background: #fff4fa;
+      border: 1px solid #f4b8d1;
+      color: var(--text-main);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 9px;
+      margin: 2px 3px 2px 0;
+    }
+
+    .dm-layout { display: grid; grid-template-columns: 240px 1fr; gap: 12px; margin-top: 10px; }
+    @media (max-width: 720px) { .dm-layout { grid-template-columns: 1fr; } }
+
+    .dm-thread-list {
+      border: 1.5px solid #ebd2f8;
+      border-radius: 14px;
+      background: #fff9fc;
+      padding: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .dm-thread-btn {
+      text-align: left;
+      border: 1.5px solid #f0d7fa;
+      background: #fff;
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dm-thread-btn.active {
+      background: linear-gradient(135deg, #ff80ab, #b388ff);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .dm-box {
+      border: 1.5px solid #ebd2f8;
+      border-radius: 14px;
+      background: #fff;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .dm-messages {
+      max-height: 240px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 6px;
+      background: #fff8fc;
+      border-radius: 12px;
+    }
+
+    .dm-msg {
+      max-width: 82%;
+      padding: 8px 12px;
+      border-radius: 14px;
+      font-size: 13px;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .dm-msg.buyer { align-self: flex-start; background: #f3e5f5; }
+    .dm-msg.admin { align-self: flex-end; background: linear-gradient(135deg, #ff7eb3, #a685ff); color: #fff; }
+    .dm-meta { font-size: 10.5px; opacity: 0.85; margin-top: 3px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .read-tag-yes { font-weight: 800; color: #e8f5e9; background: rgba(0, 0, 0, 0.22); padding: 1px 5px; border-radius: 6px; }
+    .read-tag-no { font-weight: 700; opacity: 0.85; }
+    .dm-msg.buyer .read-tag-yes { color: #2e7d32; background: #e8f5e9; }
+
+    .check-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #fff8fc;
+      border: 1px solid #ebd2f8;
+      border-radius: 8px;
+      padding: 3px 7px;
+      margin-right: 4px;
+      margin-bottom: 3px;
+      cursor: pointer;
+    }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 9px 8px; border-bottom: 1px solid #f5e1ee; text-align: left; vertical-align: middle; }
+    th { background: #fff5fa; color: var(--purple-deep); font-weight: 800; }
+
+    .num-input {
+      width: 82px;
+      padding: 5px 6px;
+      border-radius: 8px;
+      border: 1.5px solid #dfb8f2;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .name-edit-input {
+      width: 195px;
+      padding: 5px 8px;
+      border-radius: 8px;
+      border: 1.5px solid #dfb8f2;
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(52, 24, 68, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 60;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      background: #fff;
+      border-radius: 24px;
+      max-width: 640px;
+      width: 100%;
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 20px;
+      border: 2px solid #f4b8d1;
+      box-shadow: 0 20px 50px rgba(106, 27, 154, 0.25);
+    }
+
+    .alert-box {
+      background: #fff8e1;
+      border: 1.5px solid #ffca28;
+      color: #6d4c00;
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      margin: 10px 0;
+    }
+
+    .deposit-box {
+      background: #fce4ec;
+      border: 1.5px solid #f06292;
+      color: #880e4f;
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      margin: 10px 0;
+    }
+
+    .tag-win { background: #e8f5e9; color: #2e7d32; padding: 2px 7px; border-radius: 8px; font-size: 11px; font-weight: 800; }
+    .tag-wait { background: #ede7f6; color: #5e35b1; padding: 2px 7px; border-radius: 8px; font-size: 11px; font-weight: 800; }
+    .tag-cancel { background: #ffebee; color: #c62828; padding: 2px 7px; border-radius: 8px; font-size: 11px; font-weight: 800; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-badge">🌷 併團排卡</div>
+      <div>
+        <h1 id="pageTitle">呷嘎的秘密偶像公主排拆系統</h1>
+        <small>預售單張排卡｜紅字🔒 ＞ 金額高 ＞ 數量多 ＞ 先喊</small>
+      </div>
+    </div>
+    <div class="pool-tabs" id="poolTabs"></div>
+    <div class="nav-actions">
+      <span id="cloudStatusBadge" class="sync-pill">☁️ 本機＋雲端</span>
+      <button class="btn btn-soft btn-sm" onclick="syncFromCloud(true)">🔄 同步</button>
+      <button class="btn btn-soft btn-sm" onclick="openLookupModal()">🔎 輸電話查單／撤單</button>
+      <button class="btn btn-soft btn-sm" onclick="openRulesModal()">📜 喊單規則</button>
+      <button class="btn btn-primary btn-sm" onclick="openAdminLogin()">👑 老闆後台 <span id="adminHeaderUnreadBadge" class="unread-badge" style="display:none;">0</span></button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="top-banner" id="poolStatsBanner"></div>
+
+  <div class="mode-switch">
+    <button class="mode-btn active" id="tabBuyer" onclick="switchMode('buyer')">🛍️ 買家挑卡排單</button>
+    <button class="mode-btn" id="tabQueue" onclick="switchMode('queue')">📊 排單順位＆對帳總表</button>
+    <button class="mode-btn" id="tabMaster" onclick="switchMode('master')">📚 基準盤設定</button>
+    <button class="mode-btn" id="tabAdmin" onclick="openAdminLogin()" style="display:none;">👑 本盤管理後台 <span id="adminTabUnreadBadge" class="unread-badge" style="display:none;">0</span></button>
+  </div>
+
+  <section class="panel active" id="panel-buyer">
+    <div class="rules-card">
+      <div style="font-weight:800;font-size:14.5px;margin-bottom:8px;color:var(--pink-deep);">🌷 本盤重點規則提醒</div>
+      <div class="rules-grid">
+        <div class="rule-pill"><strong>🔒 順位判定：</strong>本盤採<b>單張排卡</b>，順位為併主無條件 🔒（<b>紅字</b>）＞ 金額高 ＞ 數量多 ＞ 先喊。一般買家為<b>紫色</b>。</div>
+        <div class="rule-pill"><strong>🌙 價格＆💙 綁物規則：</strong>熱門卡後面會顯示<b>需綁幾張卡片</b>，請切換至「<b>💙 綁物</b>」組別自選加購綁卡，<b>達到指定綁物張數才能送出訂單</b>（若綁物組別卡片已全數售完，則可直接下單）；<b>盲包／抽抽樂</b>為獨立加購。</div>
+        <div class="rule-pill"><strong>💰 訂金＆成團規定：</strong>總金額超過 <b>$2,000</b> 需付 <b>50% 賣貨便訂金</b>；整盤 80% 未售出則全盤失敗。</div>
+      </div>
+      <div class="contact-strip" id="buyerContactDisplay"></div>
+    </div>
+
+    <div class="buyer-bar">
+      <div class="buyer-identity">
+        <div>
+          <label style="font-size:12px;font-weight:800;display:block;margin-bottom:3px;">已加入社群</label>
+          <select id="buyerPlatformSelect" onchange="syncBuyerStatus()">
+            <option value="DC">DC</option>
+            <option value="LINE">LINE</option>
+            <option value="FB">FB</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:800;display:block;margin-bottom:3px;">用戶名稱</label>
+          <input type="text" id="buyerHandleInput" placeholder="例如：小花 / @user123" oninput="syncBuyerStatus()" />
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:800;display:block;margin-bottom:3px;">名字／暱稱（免本名）</label>
+          <input type="text" id="buyerNameInput" placeholder="任何名字／暱稱皆可" oninput="syncBuyerStatus()" />
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:800;display:block;margin-bottom:3px;">電話（必填・10碼手機）</label>
+          <input type="tel" id="buyerPhoneInput" placeholder="例如：0912345678" oninput="syncBuyerStatus()" />
+          <span id="phoneFormatHint" class="phone-status" style="color:var(--text-muted);">請輸入 10 碼手機號碼（09xxxxxxxx）</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+        <span id="buyerStatusPreview" style="font-size:12.5px;font-weight:800;color:var(--purple-deep);">填寫正確電話後即可排單</span>
+        <button class="btn btn-soft btn-sm" onclick="openLookupModal()">🔎 輸電話查單／撤單</button>
+        <button class="btn btn-soft btn-sm" onclick="openBuyerPrivateChat()">💬 專屬聊天室 <span id="buyerBarUnreadBadge" class="unread-badge" style="display:none;">0</span></button>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div id="setFilterChips" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      <label class="filter-chip"><input type="checkbox" id="onlyStarFilter" onchange="renderCards()" /> 只看 ⭐️ 熱貴卡</label>
+      <label class="filter-chip"><input type="checkbox" id="onlyAvailableFilter" onchange="renderCards()" /> 只看尚無人排單</label>
+      <input type="text" class="search-input" id="searchCardInput" placeholder="🔍 搜尋卡號、名稱..." oninput="renderCards()" />
+    </div>
+
+    <div id="setBannerBox"></div>
+    <div class="card-grid" id="cardGrid"></div>
+  </section>
+
+  <section class="panel" id="panel-queue">
+    <div class="box-card">
+      <h3 style="margin-top:0;color:var(--purple-deep);">🏆 各卡即時排單順位（自動依紅字🔒＞金額高＞數量多＞先喊排序）</h3>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>彈數/卡號</th>
+              <th>卡片名稱</th>
+              <th>價格 / 需綁張數</th>
+              <th>庫存 / 同款已挑</th>
+              <th>排單順位（第一順位得標）</th>
+            </tr>
+          </thead>
+          <tbody id="queueTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="box-card">
+      <h3 style="margin-top:0;color:var(--pink-deep);">🧾 買家喊單金額、盲包/抽抽樂加購、50% 訂金＆對帳寄件狀態</h3>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>買家</th>
+              <th>已加入 / 用戶名稱</th>
+              <th>名字 / 電話</th>
+              <th>排卡張數</th>
+              <th>卡片小計</th>
+              <th>自選綁卡金額</th>
+              <th>盲包/抽抽樂加購</th>
+              <th>總金額</th>
+              <th>訂金提醒（＞$2,000 收50%）</th>
+              <th>對帳／寄件狀態（自動連動）</th>
+            </tr>
+          </thead>
+          <tbody id="buyerSummaryBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-master">
+    <div class="box-card">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">
+        <div>
+          <h3 style="margin:0;color:var(--purple-deep);">📚 全圖鑑基準盤（買家畫面預覽＋直接改基準價）</h3>
+          <small style="color:var(--text-muted);">跟前台盤面一樣的卡片格視角！點任一張基準卡（或直接在卡片上改）就能設定基準單價、綁物與熱卡，開新盤直接沿用。</small>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <button class="btn btn-soft btn-sm" onclick="syncCurrentPoolPricesToMaster()">📥 將目前盤面寫入基準盤</button>
+          <button class="btn btn-primary btn-sm" onclick="applyMasterPricesToCurrentPool()">📤 將基準盤套用到目前盤面</button>
+        </div>
+      </div>
+
+      <div class="filter-bar" style="margin-bottom:10px;">
+        <div id="masterSetChips" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+        <label class="filter-chip"><input type="checkbox" id="masterOnlyStarFilter" onchange="renderMasterPriceBoard()" /> 只看 ⭐️ 熱貴卡</label>
+        <label class="filter-chip"><input type="checkbox" id="masterOnlyPricedFilter" onchange="renderMasterPriceBoard()" /> 只看已設金額</label>
+        <input type="text" id="masterSearchInput" class="search-input" style="min-width:180px;padding:6px 10px;" placeholder="🔍 搜尋基準卡號、卡名..." oninput="renderMasterPriceBoard()" />
+      </div>
+
+      <div id="masterBannerBox"></div>
+      <div class="card-grid" id="masterCardGrid" style="max-height:620px;overflow-y:auto;padding:4px;"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-admin">
+    <div class="box-card">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;">
+        <div>
+          <h3 style="margin:0;color:var(--purple-deep);">👑 本盤管理後台（目前盤面：<span id="adminPoolName"></span>）</h3>
+          <small style="color:var(--text-muted);">全部卡片金額設定、開新盤直接複製、改卡名、調數量、傳整彈大圖</small>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <button class="btn btn-primary btn-sm" onclick="openNewPoolModal()">＋ 開設新盤（可複製現有盤）</button>
+          <button class="btn btn-soft btn-sm" onclick="openAddCardModal()">＋ 新增卡片</button>
+          <button class="btn btn-danger btn-sm" id="toggleFailed80Btn" onclick="toggleFailed80Status()">⚠️ 標記全盤失敗（流盤）</button>
+          <button class="btn btn-soft btn-sm" onclick="copyPoolSummary()">📋 一鍵複製全盤公告</button>
+          <button class="btn btn-danger btn-sm" onclick="resetCurrentPoolOrders()">🧹 清空本盤喊單</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteCurrentPool()">🗑️ 刪除此盤</button>
+          <button class="btn btn-soft btn-sm" onclick="logoutAdmin()">登出後台</button>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <strong>💰 全部卡片金額／價格設定：</strong>
+        <select id="bulkTargetSet" style="padding:6px 10px;border-radius:10px;border:1.5px solid #dfb8f2;">
+          <option value="ALL">本盤全部卡片</option>
+        </select>
+
+        <label class="check-pill" style="margin:0;">
+          <input type="checkbox" id="bulkOnlyZeroPrice" /> 只改單價為 $0 的卡片
+        </label>
+
+        <span>統一設成：</span>
+        <input type="number" id="bulkFixedPrice" class="num-input" min="0" step="10" placeholder="金額" />
+        <button class="btn btn-primary btn-sm" onclick="applyBulkFixedPrice()">套用統一金額</button>
+
+        <span>或加減：</span>
+        <input type="number" id="bulkDeltaPrice" class="num-input" value="0" placeholder="+/-元" />
+        <button class="btn btn-soft btn-sm" onclick="applyBulkPriceDelta()">套用加減價</button>
+      </div>
+
+      <div class="admin-section">
+        <strong>🖼️ 整彈大圖設定（自動壓縮防爆）：</strong>
+        <select id="adminSetBannerSelect" style="padding:6px 10px;border-radius:10px;border:1.5px solid #dfb8f2;"></select>
+        <label class="btn btn-primary btn-sm" style="cursor:pointer;">
+          上傳／更換該彈大圖
+          <input type="file" accept="image/*" style="display:none;" onchange="uploadSetBanner(this)" />
+        </label>
+        <button class="btn btn-soft btn-sm" onclick="clearSetBanner()">移除該彈大圖</button>
+      </div>
+
+      <div class="admin-section">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;width:100%;">
+          <strong>📩 老闆聯絡方式設定：</strong>
+          <button class="btn btn-primary btn-sm" onclick="saveContactInfo()">💾 儲存聯絡方式</button>
+        </div>
+        <div class="contact-form-grid">
+          <div><input type="text" id="contactLineInput" placeholder="LINE / ID" /></div>
+          <div><input type="text" id="contactSocialInput" placeholder="IG / Discord / 賣場連結" /></div>
+          <div><input type="text" id="contactOtherInput" placeholder="其他聯絡方式" /></div>
+          <div style="grid-column:1/-1;"><textarea id="contactNoteInput" rows="2" placeholder="對帳／匯款／取貨提醒文字"></textarea></div>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <strong>🔒 紅字名單（輸入電話、用戶名稱或名字，逗號分隔）：</strong>
+        <input type="text" id="redCodesInput" style="flex:1;min-width:200px;padding:6px 10px;border-radius:10px;border:1.5px solid #dfb8f2;" placeholder="例如：0912345678, 併主小花" onchange="saveRedCodes()" />
+      </div>
+    </div>
+
+    <div class="box-card">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">
+        <div>
+          <h3 style="margin:0;color:var(--pink-deep);">📦 每人最終得標卡片＆盲包/抽抽樂加購總覽（包貨＆結算用）<span id="adminFailed80Badge"></span></h3>
+          <small style="color:var(--text-muted);">自動依順位結算每位買家最終得標卡片與藍字綁物，盲包/抽抽樂加購獨立列出</small>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="copyFinalWinnersSummary()">📋 一鍵複製最終得標分貨表</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>買家名字 / 電話</th>
+              <th>社群聯絡</th>
+              <th>最終得標卡片（張數）</th>
+              <th>候補中卡片</th>
+              <th>得標＋綁物＋盲包加購</th>
+            </tr>
+          </thead>
+          <tbody id="adminFinalWinnersBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="box-card">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">
+        <div style="cursor:pointer;" onclick="toggleAdminOrdersCollapse()">
+          <h3 style="margin:0;color:var(--purple-deep);">📌 全部喊單紀錄管理（可單筆取消訂單、標記已對帳／已寄件）</h3>
+          <small style="color:var(--text-muted);">點擊右側按鈕可收合或展開喊單紀錄</small>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+          <button type="button" class="btn btn-soft btn-sm" id="toggleAdminOrdersBtn" onclick="toggleAdminOrdersCollapse()">🔼 收合喊單</button>
+        </div>
+      </div>
+      <div id="adminOrdersCollapseBody">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;">
+          <label class="check-pill" style="margin:0;"><input type="checkbox" id="adminOnlyUnpaidFilter" onchange="renderAdminOrders()" /> 只看未對帳</label>
+          <label class="check-pill" style="margin:0;"><input type="checkbox" id="adminOnlyUnshippedFilter" onchange="renderAdminOrders()" /> 只看未寄件</label>
+          <input type="text" id="adminOrderSearchInput" class="search-input" style="min-width:170px;padding:6px 10px;" placeholder="🔍 搜名字、電話、卡號..." oninput="renderAdminOrders()" />
+        </div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>買家</th>
+                <th>社群/用戶</th>
+                <th>名字/電話</th>
+                <th>卡片＆備註</th>
+                <th>綁物 / 盲包加購</th>
+                <th>時間</th>
+                <th>對帳／寄件＆操作</th>
+              </tr>
+            </thead>
+            <tbody id="adminOrdersTableBody"></tbody>
+          </table>
+        </div>
+        <div style="margin-top:16px;padding-top:14px;border-top:1px dashed #e6c7f5;">
+          <h4 style="margin:0 0 8px;color:var(--text-muted);">🗂️ 已撤回／已取消訂單歷史紀錄（含原因與帳務提醒）</h4>
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>狀態</th>
+                  <th>名字 / 電話</th>
+                  <th>原喊卡片</th>
+                  <th>處理方式＆時間</th>
+                  <th>撤單原因／帳務備註</th>
+                </tr>
+              </thead>
+              <tbody id="adminCancelledOrdersBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box-card">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;cursor:pointer;" onclick="toggleAdminCardsCollapse()">
+        <div>
+          <h3 style="margin:0;color:var(--pink-deep);">📝 本盤卡片名稱、價格＆數量調整 <span id="adminCardsCountTag" style="font-size:12.5px;color:var(--text-muted);font-weight:700;"></span></h3>
+          <small style="color:var(--text-muted);">點擊右側按鈕可展開或收合整張卡片設定表</small>
+        </div>
+        <button type="button" class="btn btn-soft btn-sm" id="toggleAdminCardsBtn">🔼 收合卡表</button>
+      </div>
+      <div id="adminCardsCollapseBody" style="overflow-x:auto;margin-top:10px;">
+        <table>
+          <thead>
+            <tr>
+              <th>彈數/卡號</th>
+              <th>卡片名稱</th>
+              <th>單價 (🌙)</th>
+              <th>需綁張數 (💙)</th>
+              <th>熱卡 ⭐️</th>
+              <th>數量</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="adminCardTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="box-card">
+      <h3 style="margin-top:0;color:var(--pink-deep);">💬 買家一對一專屬聊天室（支援已讀／未讀顯示）</h3>
+      <div class="dm-layout">
+        <div class="dm-thread-list" id="adminDmThreadList"></div>
+        <div class="dm-box">
+          <div id="adminDmHeader" style="font-weight:800;font-size:13.5px;color:var(--purple-deep);">請從左側選擇一位買家</div>
+          <div class="dm-messages" id="adminDmMessages"></div>
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="adminDmInput" style="flex:1;padding:8px 12px;border-radius:12px;border:1.5px solid #dfb8f2;" placeholder="輸入回覆..." onkeydown="if(event.key==='Enter')sendAdminDm()" />
+            <button class="btn btn-primary btn-sm" onclick="sendAdminDm()">傳送</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- 底部固定列（手機版也完整保留查單與聊天室入口） -->
+<div class="cart-dock">
+  <div class="cart-dock-inner">
+    <div class="cart-summary" id="cartSummaryText">尚未勾選卡片｜名字隨意填、電話必填</div>
+    <div class="cart-dock-actions">
+      <button class="btn btn-soft btn-sm" onclick="openLookupModal()">🔎 查單／撤單</button>
+      <button class="btn btn-soft btn-sm" onclick="openBuyerPrivateChat()">💬 聊天室 <span id="dockUnreadBadge" class="unread-badge" style="display:none;">0</span></button>
+      <button class="btn btn-soft btn-sm" onclick="clearSelection()">清除</button>
+      <button class="btn btn-primary btn-sm" onclick="openCheckoutModal()">✨ 確認送出喊單</button>
+    </div>
+  </div>
+</div>
+
+<!-- 複數卡片數量選擇視窗 -->
+<div class="modal-backdrop" id="multiQtyModal">
+  <div class="modal" style="max-width:420px;">
+    <h3 style="margin-top:0;color:var(--purple-deep);">🔢 選擇複數卡片張數</h3>
+    <div id="multiQtyCardInfo" style="font-size:13.5px;line-height:1.6;margin-bottom:12px;"></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <label style="font-weight:800;font-size:13px;">需要張數：</label>
+      <input type="number" id="multiQtyInput" class="num-input" style="width:96px;" min="1" value="1" />
+      <span id="multiQtyMaxLabel" style="font-size:12px;color:var(--text-muted);"></span>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">
+      <button class="btn btn-danger btn-sm" id="multiQtyRemoveBtn" onclick="removeMultiQtyCard()">移除此卡</button>
+      <button class="btn btn-soft btn-sm" onclick="closeModal('multiQtyModal')">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="confirmMultiQtyCard()">確定</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="lookupModal">
+  <div class="modal" style="max-width:560px;">
+    <h3 style="margin-top:0;color:var(--purple-deep);">🔎 輸入電話查詢我的排單／自行撤回訂單</h3>
+    <div style="display:flex;gap:8px;">
+      <input type="tel" id="lookupPhoneInput" style="flex:1;padding:9px 12px;border-radius:12px;border:1.5px solid #dfb8f2;" placeholder="輸入 10 碼手機（例如：0912345678）" onkeydown="if(event.key==='Enter')runPhoneLookup()" />
+      <button class="btn btn-primary btn-sm" onclick="runPhoneLookup()">查詢</button>
+    </div>
+    <div id="lookupResultBox" style="margin-top:12px;font-size:13px;line-height:1.65;"></div>
+    <div style="text-align:right;margin-top:14px;"><button class="btn btn-soft btn-sm" onclick="closeModal('lookupModal')">關閉</button></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="checkoutModal">
+  <div class="modal">
+    <h3 style="margin-top:0;color:var(--pink-deep);">🌷 確認喊單、綁物、盲包加購與訂金計算</h3>
+    <div id="checkoutDetail"></div>
+
+    <div style="margin-top:12px;padding:10px 12px;border-radius:14px;background:#f3f8ff;border:1.5px solid #bbdefb;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+        <strong style="font-size:13px;color:var(--blue-bind);">① 自選加購綁卡進度：</strong>
+        <button type="button" class="btn btn-soft btn-sm" style="color:var(--blue-bind);border-color:#90caf9;" onclick="jumpToBindCategory()">💙 前往「綁物」組別挑卡</button>
+      </div>
+      <div id="checkoutBindStatus" style="font-size:12.5px;margin-top:6px;line-height:1.55;"></div>
+    </div>
+
+    <div style="margin-top:12px;padding-top:10px;border-top:1px dashed #e6c7f5;">
+      <label style="font-weight:800;font-size:13px;display:block;margin-bottom:6px;">② 盲包／抽抽樂獨立加購：</label>
+      <select id="gachaAddonType" style="width:100%;padding:9px 12px;border-radius:12px;border:1.5px solid #dfb8f2;" onchange="refreshCheckoutModal()">
+        <option value="none">不加購盲包／抽抽樂</option>
+        <option value="gacha250">加購盲包／抽抽樂 ① 簽卡、稀有包（$250 / 1抽）</option>
+        <option value="gacha100">加購盲包／抽抽樂 ② 一般、普通（$100 / 1抽）</option>
+      </select>
+      <div id="gachaCountRow" style="display:none;margin-top:10px;">
+        <label style="font-weight:800;font-size:13px;">加購抽數／包數：</label>
+        <input type="number" id="gachaCountInput" class="num-input" style="width:90px;" min="1" value="1" onchange="refreshCheckoutModal()" />
+      </div>
+    </div>
+
+    <div style="margin-top:10px;">
+      <input type="text" id="orderNoteInput" style="width:100%;padding:8px 12px;border-radius:12px;border:1.5px solid #dfb8f2;" placeholder="備註（可留空）" />
+    </div>
+    <div id="checkoutAlerts"></div>
+    <div style="margin-top:14px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">
+      <button class="btn btn-soft" onclick="closeModal('checkoutModal')">取消</button>
+      <button class="btn btn-primary" id="submitOrderBtn" onclick="submitBuyerOrder()">✅ 送出排單並生成文字</button>
+    </div>
+    <div id="generatedOrderOutput" style="display:none;margin-top:14px;">
+      <textarea id="orderCopyText" rows="10" style="width:100%;padding:10px;border-radius:12px;border:1.5px solid #ce93d8;font-size:12.5px;"></textarea>
+      <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
+        <button class="btn btn-soft btn-sm" onclick="copyOrderText()">📋 一鍵複製明細</button>
+        <button class="btn btn-primary btn-sm" onclick="closeModal('checkoutModal')">✅ 完成並關閉視窗</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="buyerChatModal">
+  <div class="modal" style="max-width:500px;">
+    <h3 id="buyerChatTitle" style="margin-top:0;color:var(--purple-deep);">💬 個人專屬聊天室</h3>
+    <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center;">
+      <input type="tel" id="buyerChatPhoneInput" style="flex:1;padding:7px 10px;border-radius:10px;border:1.5px solid #dfb8f2;font-size:12.5px;" placeholder="輸入 10 碼手機切換／查看聊天紀錄" onkeydown="if(event.key==='Enter')switchBuyerChatPhone()" />
+      <button class="btn btn-soft btn-sm" onclick="switchBuyerChatPhone()">切換電話</button>
+    </div>
+    <div class="dm-messages" id="buyerChatMessages"></div>
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <input type="text" id="buyerChatInput" style="flex:1;padding:8px 12px;border-radius:12px;border:1.5px solid #dfb8f2;" placeholder="輸入想私訊老闆的內容..." onkeydown="if(event.key==='Enter')sendBuyerDm()" />
+      <button class="btn btn-primary btn-sm" onclick="sendBuyerDm()">傳送</button>
+    </div>
+    <div style="text-align:right;margin-top:12px;"><button class="btn btn-soft btn-sm" onclick="closeModal('buyerChatModal')">關閉</button></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="rulesModal">
+  <div class="modal">
+    <h3 style="margin-top:0;color:var(--pink-deep);">🌷 喊單規定 規則</h3>
+    <div id="modalContactBlock" class="contact-strip" style="margin-bottom:12px;"></div>
+    <div style="font-size:13px;line-height:1.75;">
+      <p>• 此盤是預售（<b>單張排卡</b>），採 <b>併主無條件 🔒（紅字）＞ 金額高 ＞ 數量多 ＞ 先喊</b>，只有併主／副併主及指定人員為紅字，一般買家為紫色。</p>
+      <p>• 圖上皆有價格 🌙，熱門卡會顯示<b>需綁幾張卡片（💙 綁X張）</b>，請點選「<b>💙 綁物</b>」組別自選加購綁卡，達到綁物張數才可送出訂單（若綁物組別已全部售完則可直接下單）；盲包／抽抽樂獨立為加購（① 簽卡/稀有包 $250/抽、② 一般/普通 $100/抽）。</p>
+      <p>• 不看卡況，皆默認廠損，有嚴重損會告知；併團時間為一週，未售出卡片可做盲包／抽抽樂。</p>
+      <p>• 若整盤 80% 未售出，則全部交易視為失敗。</p>
+      <p>• 總金額超過 <b>$2,000</b> 需付 <b>50% 訂金</b>，由賣貨便方式付訂金。</p>
+    </div>
+    <div style="text-align:right;margin-top:14px;">
+      <button class="btn btn-primary btn-sm" onclick="closeModal('rulesModal')">我知道了</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="newPoolModal">
+  <div class="modal" style="max-width:500px;">
+    <h3 style="margin-top:0;color:var(--purple-deep);">＋ 開設新盤</h3>
+    <label style="font-size:13px;font-weight:800;display:block;margin-bottom:4px;">新盤面名稱</label>
+    <input type="text" id="newPoolNameInput" style="width:100%;padding:8px 12px;border-radius:12px;border:1.5px solid #dfb8f2;" placeholder="例如：第三盤・第六彈＋ring1" />
+
+    <div style="margin-top:12px;padding:10px 12px;border-radius:14px;background:#fff8fc;border:1.5px solid #ebd2f8;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
+        <span style="font-size:13px;font-weight:800;color:var(--purple-deep);">選擇要加入新盤的彈數：</span>
+        <div style="display:flex;gap:6px;">
+          <button type="button" class="btn btn-soft btn-sm" onclick="toggleAllNewPoolSets(true)">全選彈數</button>
+          <button type="button" class="btn btn-soft btn-sm" onclick="toggleAllNewPoolSets(false)">全不選</button>
+        </div>
+      </div>
+      <div id="newPoolSetsList" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      <div style="margin-top:8px;">
+        <label style="font-size:12.5px;font-weight:800;color:var(--pink-deep);display:block;margin-bottom:4px;">價格與設定沿用來源：</label>
+        <select id="newPoolPriceSource" style="width:100%;padding:7px 10px;border-radius:10px;border:1.5px solid #dfb8f2;font-size:12.5px;font-weight:700;background:#fff;">
+          <option value="master" selected>📚 優先沿用「全圖鑑買賣價格基準表」（沒設再看目前盤面／預設）</option>
+          <option value="current">📋 優先沿用「目前盤面」的價格與設定（沒設再補基準表）</option>
+          <option value="zero">🆕 全數歸零重設（單價 $0、綁物 $0）</option>
+        </select>
+      </div>
+      <div style="font-size:11.5px;color:var(--text-muted);margin-top:6px;">
+        • 勾選想開的彈數即可只帶入特定彈數；若<b>全不選</b>，則建立空白卡表的新盤，之後可再按「＋ 新增卡片」慢慢加。
+      </div>
+    </div>
+
+    <label class="check-pill" style="margin-top:10px;">
+      <input type="checkbox" id="copyNewPoolSettings" checked /> 同步帶入目前盤面的紅字名單與聯絡方式
+    </label>
+
+    <div style="margin-top:14px;display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn btn-soft btn-sm" onclick="closeModal('newPoolModal')">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="createNewPool()">建立新盤</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="addCardModal">
+  <div class="modal" style="max-width:480px;">
+    <h3 style="margin-top:0;color:var(--pink-deep);">＋ 新增卡片品項</h3>
+    <div style="display:grid;gap:10px;">
+      <div>
+        <label style="font-size:12.5px;font-weight:800;">彈數 / 組別</label>
+        <select id="addCardSet" style="width:100%;padding:8px 10px;border-radius:10px;border:1.5px solid #dfb8f2;">
+          <option>綁物</option><option>活動卡表</option><option>第一彈</option><option>第二彈</option>
+          <option>第三彈</option><option>第四彈</option><option>第五彈</option><option selected>第六彈</option><option>ring1</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:12.5px;font-weight:800;">卡號</label>
+        <input type="text" id="addCardCode" style="width:100%;padding:8px 10px;border-radius:10px;border:1.5px solid #dfb8f2;" placeholder="例如：AP6-001" />
+      </div>
+      <div>
+        <label style="font-size:12.5px;font-weight:800;">卡片名稱</label>
+        <input type="text" id="addCardName" style="width:100%;padding:8px 10px;border-radius:10px;border:1.5px solid #dfb8f2;" placeholder="例如：浪漫華爾滋" />
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div>
+          <label style="font-size:12.5px;font-weight:800;">單價 (🌙)</label>
+          <input type="number" id="addCardPrice" class="num-input" style="width:100%;" min="0" value="0" />
+        </div>
+        <div>
+          <label style="font-size:12.5px;font-weight:800;">需綁張數 (💙張)</label>
+          <input type="number" id="addCardBind" class="num-input" style="width:100%;" min="0" value="0" />
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:center;">
+        <div>
+          <label style="font-size:12.5px;font-weight:800;">數量</label>
+          <input type="number" id="addCardQty" class="num-input" style="width:100%;" min="1" value="1" />
+        </div>
+        <label class="check-pill" style="margin-top:16px;">
+          <input type="checkbox" id="addCardStar" /> 熱貴卡 ⭐️
+        </label>
+      </div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn btn-soft btn-sm" onclick="closeModal('addCardModal')">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="confirmAddCard()">確認新增</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="masterCardEditModal">
+  <div class="modal" style="max-width:440px;">
+    <h3 style="margin-top:0;color:var(--purple-deep);">📚 編輯基準盤卡片設定</h3>
+    <div id="masterEditCardHeader" style="font-size:13px;color:var(--text-muted);margin-bottom:10px;"></div>
+    <input type="hidden" id="masterEditKeyInput" />
+    <div style="display:grid;gap:10px;">
+      <div>
+        <label style="font-size:12.5px;font-weight:800;">卡片名稱</label>
+        <input type="text" id="masterEditNameInput" style="width:100%;padding:8px 10px;border-radius:10px;border:1.5px solid #dfb8f2;font-weight:700;" />
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div>
+          <label style="font-size:12.5px;font-weight:800;">基準單價 (🌙)</label>
+          <input type="number" id="masterEditPriceInput" class="num-input" style="width:100%;" min="0" step="10" />
+        </div>
+        <div>
+          <label style="font-size:12.5px;font-weight:800;">基準需綁張數 (💙張)</label>
+          <input type="number" id="masterEditBindInput" class="num-input" style="width:100%;" min="0" step="10" />
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:center;">
+        <div>
+          <label style="font-size:12.5px;font-weight:800;">開新盤預設張數</label>
+          <input type="number" id="masterEditQtyInput" class="num-input" style="width:100%;" min="1" />
+        </div>
+        <label class="check-pill" style="margin-top:16px;">
+          <input type="checkbox" id="masterEditStarInput" /> 熱貴卡 ⭐️
+        </label>
+      </div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn btn-soft btn-sm" onclick="closeModal('masterCardEditModal')">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="saveMasterCardModal()">💾 儲存基準設定</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="adminLoginModal">
+  <div class="modal" style="max-width:380px;">
+    <h3 style="margin-top:0;color:var(--purple-deep);">👑 老闆後台驗證</h3>
+    <input type="password" id="adminPassInput" style="width:100%;padding:9px 12px;border-radius:12px;border:1.5px solid #dfb8f2;" placeholder="輸入後台密碼" onkeydown="if(event.key==='Enter')verifyAdminLogin()" />
+    <div id="adminLoginHint" style="font-size:12px;color:#c62828;margin-top:6px;"></div>
+    <div style="margin-top:14px;display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn btn-soft btn-sm" onclick="closeModal('adminLoginModal')">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="verifyAdminLogin()">進入後台</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const CLOUD_URL = "https://script.google.com/macros/s/AKfycbwEb8tOC5S5KjVuPi3H6LGVXcUggS60H-bd2QYPMlHoc2PRBeCpAhPplh_xlm277i1tbQ/exec";
+  const ADMIN_PASS = "1916";
+  const STORAGE_KEY = "dream_macaron_pool_v3";
+  const SETS = ["全部", "綁物", "活動卡表", "第一彈", "第二彈", "第三彈", "第四彈", "第五彈", "第六彈", "ring1"];
+
+  const RAW_CARD_SHEETS = {
+    "活動卡表": [
+      ["ACT-01", "人氣螢光幻彩 Scarlet Butterfly 人氣螢光幻彩"],
+      ["ACT-02", "上市100天慶祝活動 迷迭可愛兔寶寶"],
+      ["ACT-03", "上市紀念！偶像機台體驗會 偶像公主立牌 Poppin' Heart"],
+      ["ACT-04", "先行偶像機台體驗會 偶像公主立牌 Miracle Moon"],
+      ["ACT-05", "先行偶像機台體驗會（出示夢寶卡）Poppin' Heart 人氣螢光幻彩"],
+      ["ACT-06", "官方LINE好友人數突破400000！偶像公主幸運抽獎 永恆花輪紅"],
+      ["ACT-07", "店鋪賽參賽獎 2026/3月 盛開大賽螢光粉紅"],
+      ["ACT-08", "店鋪賽參賽獎 2026/5月 典人魚大賽紫"],
+      ["ACT-09", "店鋪賽參賽獎 2026/7月 召喚大賽螢光粉紅"],
+      ["ACT-10", "店鋪賽參賽獎 2026/9月 極光白雪大賽黃"],
+      ["ACT-11", "店鋪賽優勝名次 2026/4月 花朵精靈藍色花朵"],
+      ["ACT-12", "店鋪賽優勝名次 2026/5月 銀河彩虹"],
+      ["ACT-13", "店鋪賽優勝名次 2026/7月 可愛糖果巧克力粉"],
+      ["ACT-14", "店鋪賽優勝名次 2026/9月 盛典今機台"],
+      ["ACT-15", "無月謝生照！偶像公主幸運抽獎 藍斯夢幻料理粉紅"],
+      ["ACT-16", "秘密的偶像公主動畫 特別聖誕紀念活動！小妖精紫"],
+      ["ACT-17", "偶像公主大集合！人魚快樂 Q彈果凍香草"],
+      ["ACT-18", "偶像公主大集合！演藝傳說 Flower March 人氣螢光幻彩"],
+      ["ACT-19", "偶像公主大集合！遊玩快樂 俏皮點點少蓓藍"],
+      ["ACT-20", "第八彈發卡活動 2026/10/24 聖誕派對"],
+      ["ACT-21", "第六彈發卡活動 2026/11/07 盛典今機台公主白"],
+      ["ACT-22", "尊榮限定！偶像公主專屬卡套 翠綠寶石黃"],
+      ["ACT-23", "尊榮發卡活動 偶像公主立牌 Miracle Moon 灰"],
+      ["ACT-24", "附贈手環/卡組附卡 粉紅色寶石"],
+      ["ACT-25", "尊榮誕生祭！偶像公主專屬抽獎 清新檸檬綠花"],
+      ["ACT-26", "新生派對應援卡活動 可愛草莓夢夢可愛"]
+    ],
+    "第一彈": [
+      ["AP1-001", "Poppin' Heart 人氣螢光幻彩"],
+      ["AP1-001P", "Poppin' Heart 人氣螢光幻彩"],
+      ["AP1-002", "Miracle Moon 人氣螢光幻彩"],
+      ["AP1-002P", "Miracle Moon 人氣螢光幻彩"],
+      ["AP1-003", "Scarlet Butterfly 人氣螢光幻彩"],
+      ["AP1-003P", "Scarlet Butterfly 人氣螢光幻彩"],
+      ["AP1-004", "俏皮可愛兔寶寶"],
+      ["AP1-004P", "俏皮可愛兔寶寶"],
+      ["AP1-005", "俏皮可愛兔寶寶藍"],
+      ["AP1-006", "甜甜圈甜點師"],
+      ["AP1-007", "甜甜圈甜點師"],
+      ["AP1-008", "Q彈果凍蘇打"],
+      ["AP1-009", "Q彈果凍蘇打"],
+      ["AP1-010", "香草莓果塔"],
+      ["AP1-011", "香草莓果塔"],
+      ["AP1-012", "甜美櫻桃"],
+      ["AP1-013", "甜美櫻桃藍"],
+      ["AP1-014", "閃耀水母藍"],
+      ["AP1-015", "閃耀水母粉紅"],
+      ["AP1-016", "蝴蝶魔術師"],
+      ["AP1-017", "蝴蝶魔術師紅"],
+      ["AP1-018", "生日快樂！陽葵"],
+      ["AP1-018P", "生日快樂！陽葵"],
+      ["AP1-019", "生日快樂！美月"]
+    ],
+    "第二彈": [
+      ["AP2-001", "Flower March 人氣螢光幻彩"],
+      ["AP2-001P", "Flower March 人氣螢光幻彩"],
+      ["AP2-002", "Rosession 人氣螢光幻彩"],
+      ["AP2-002P", "Rosession 人氣螢光幻彩"],
+      ["AP2-003", "Poppin' Heart 人氣螢光幻彩"],
+      ["AP2-004", "Scarlet Butterfly 人氣螢光幻彩"],
+      ["AP2-005", "薔薇大賽"],
+      ["AP2-005P", "薔薇大賽"],
+      ["AP2-006", "薔薇大賽"],
+      ["AP2-007", "清新檸檬粉紅"],
+      ["AP2-008", "清新檸檬藍"],
+      ["AP2-009", "貓咪魔術師"],
+      ["AP2-009P", "貓咪魔術師"],
+      ["AP2-010", "貓咪魔術師"],
+      ["AP2-011", "花朵回憶"],
+      ["AP2-012", "花朵回憶紫"],
+      ["AP2-013", "優雅寶石藍"],
+      ["AP2-014", "優雅寶石紅"],
+      ["AP2-015", "小妖精"],
+      ["AP2-016", "小妖精"],
+      ["AP2-017", "西洋棋"],
+      ["AP2-018", "西洋棋"],
+      ["AP2-019", "浪漫吊燈"],
+      ["AP2-020", "浪漫吊燈"]
+    ],
+    "第三彈": [
+      ["AP3-001", "Secret Friends ∞人氣螢光幻彩粉紅"],
+      ["AP3-001P", "Secret Friends ∞人氣螢光幻彩粉紅"],
+      ["AP3-002", "Secret Friends ∞人氣螢光幻彩藍"],
+      ["AP3-002P", "Secret Friends ∞人氣螢光幻彩藍"],
+      ["AP3-003", "Secret Friends ∞人氣螢光幻彩黃"],
+      ["AP3-003P", "Secret Friends ∞人氣螢光幻彩黃"],
+      ["AP3-004", "Rainbow Candy 人氣螢光幻彩"],
+      ["AP3-005", "Bear Bear Bear 人氣螢光幻彩"],
+      ["AP3-006", "美人魚大賽粉紅"],
+      ["AP3-007", "美人魚大賽藍"],
+      ["AP3-008", "美人魚大賽黃"],
+      ["AP3-009", "可愛糖糖"],
+      ["AP3-010", "可愛糖糖"],
+      ["AP3-011", "華麗金魚"],
+      ["AP3-012", "華麗金魚"],
+      ["AP3-013", "繽紛糖果"],
+      ["AP3-014", "繽紛糖果"],
+      ["AP3-015", "晚安綿羊"],
+      ["AP3-016", "晚安綿羊"],
+      ["AP3-017", "閃耀水母藍"],
+      ["AP3-018", "生日快樂！紡"],
+      ["AP3-018P", "生日快樂！紡"],
+      ["AP3-019", "生日快樂！珠希"]
+    ],
+    "第四彈": [
+      ["AP4-001", "Quartet STAR 人氣螢光幻彩紅心"],
+      ["AP4-001P", "Quartet STAR 人氣螢光幻彩紅心"],
+      ["AP4-002", "Quartet STAR 人氣螢光幻彩黑桃"],
+      ["AP4-002P", "Quartet STAR 人氣螢光幻彩黑桃"],
+      ["AP4-003", "Quartet STAR 人氣螢光幻彩方塊"],
+      ["AP4-003P", "Quartet STAR 人氣螢光幻彩方塊"],
+      ["AP4-004", "Quartet STAR 人氣螢光幻彩梅花"],
+      ["AP4-004P", "Quartet STAR 人氣螢光幻彩梅花"],
+      ["AP4-005", "Love My Music 人氣螢光幻彩"],
+      ["AP4-005P", "Love My Music 人氣螢光幻彩"],
+      ["AP4-006", "羽毛大賽熾焰紅"],
+      ["AP4-007", "羽毛大賽熾焰藍"],
+      ["AP4-008", "羽毛大賽可愛綠"],
+      ["AP4-009", "羽毛大賽可愛橘"],
+      ["AP4-010", "奇蹟萬聖節粉紅"],
+      ["AP4-011", "奇蹟萬聖節藍"],
+      ["AP4-012", "奇蹟萬聖節黃"],
+      ["AP4-013", "幽靈萬聖節"],
+      ["AP4-014", "幽靈萬聖節"],
+      ["AP4-015", "小惡魔搖滾"],
+      ["AP4-016", "童話灰姑娘"],
+      ["AP4-017", "童話白雪公主"],
+      ["AP4-018", "童話小紅帽"],
+      ["AP4-019", "生日快樂！櫻"],
+      ["AP4-019P", "生日快樂！櫻"]
+    ],
+    "第五彈": [
+      ["AP5-001", "Flower March 公主·人氣螢光幻彩"],
+      ["AP5-001P", "Flower March 公主·人氣螢光幻彩"],
+      ["AP5-002", "Flower March 公主·人氣螢光幻彩"],
+      ["AP5-003", "Flower March 人氣螢光幻彩純潔白"],
+      ["AP5-004", "極光白雪大賽"],
+      ["AP5-004P", "極光白雪大賽"],
+      ["AP5-005", "蕾蕾"],
+      ["AP5-006", "蕾蕾黑"],
+      ["AP5-007", "特殊聖誕節紅"],
+      ["AP5-008", "特殊聖誕節紅"],
+      ["AP5-009", "特殊聖誕節藍"],
+      ["AP5-010", "特殊聖誕節綠"],
+      ["AP5-011", "特殊聖誕節橘"],
+      ["AP5-012", "特殊聖誕節白"],
+      ["AP5-012P", "特殊聖誕節白"],
+      ["AP5-013", "蹦蹦跳跳兔寶寶"],
+      ["AP5-013P", "蹦蹦跳跳兔寶寶"],
+      ["AP5-014", "童話夢遊仙境"],
+      ["AP5-015", "春節粉紅"],
+      ["AP5-016", "春節藍"],
+      ["AP5-017", "春節黃"],
+      ["AP5-018", "童話小飛俠"],
+      ["AP5-019", "花朵回憶純潔白"]
+    ],
+    "第六彈": [
+      ["AP6-001", "蘭里Quartet STAR人氣螢光幻彩紅"],
+      ["AP6-002", "蘭里Quartet STAR人氣螢光幻彩藍"],
+      ["AP6-002P", "蘭里Quartet STAR人氣螢光幻彩藍"],
+      ["AP6-003", "蘭里Quartet STAR人氣螢光幻彩綠"],
+      ["AP6-003P", "蘭里Quartet STAR人氣螢光幻彩綠"],
+      ["AP6-004", "蘭里Quartet STAR人氣螢光幻彩橘"],
+      ["AP6-005", "蘭里星星旋律"],
+      ["AP6-006", "蘭里星星旋律"],
+      ["AP6-007", "Secret Friends ∞人氣螢光幻彩純潔白"],
+      ["AP6-008", "Secret Friends ∞人氣螢光幻彩純潔白"],
+      ["AP6-009", "Secret Friends ∞人氣螢光幻彩純潔白"],
+      ["AP6-010", "少女風鋼琴"],
+      ["AP6-011", "少女風鋼琴"],
+      ["AP6-012", "情人節怪獸粉紅"],
+      ["AP6-013", "情人節怪獸藍"],
+      ["AP6-014", "情人節怪獸黃"],
+      ["AP6-014P", "情人節怪獸黃"],
+      ["AP6-015", "浪漫華爾滋"],
+      ["AP6-016", "浪漫華爾滋"],
+      ["AP6-017", "西洋棋組"],
+      ["AP6-018", "西洋棋組"],
+      ["AP6-019", "繽紛糖果快樂"],
+      ["AP6-020", "晚安綿羊夜"]
+    ],
+    "ring1": [
+      ["APR1-001", "寶石人氣螢光幻彩紅寶石"],
+      ["APR1-002", "寶石人氣螢光幻彩藍寶石"],
+      ["APR1-003", "寶石人氣螢光幻彩鑽石"],
+      ["APR1-004", "寶石人氣螢光幻彩海藍寶石"],
+      ["APR1-005", "友誼之星大賽粉紅"],
+      ["APR1-006", "友誼之星大賽藍"],
+      ["APR1-007", "Quartet STAR 人氣螢光幻彩紅心玫瑰"],
+      ["APR1-008", "Quartet STAR 人氣螢光幻彩黑桃紅"],
+      ["APR1-009", "Quartet STAR 人氣螢光幻彩方塊綠"],
+      ["APR1-010", "Quartet STAR 人氣螢光幻彩梅花糖果"],
+      ["APR1-011", "閃耀水母純潔白"],
+      ["APR1-012", "狂熱惡魔"],
+      ["APR1-013", "狂熱天使"],
+      ["APR1-014", "超可愛丹寧風"],
+      ["APR1-015", "超可愛丹寧風愛心"],
+      ["APR1-016", "童話天方夜譚"],
+      ["APR1-017", "童話天方夜譚"],
+      ["APR1-018", "清新檸檬粉紅"],
+      ["APR1-019", "清新檸檬藍"],
+      ["APR1-020", "生日快樂！茱莉亞"],
+      ["APR1-021", "生日快樂！愛琉"]
+    ]
+  };
+
+  function createSampleCards() {
+    const list = [];
+    Object.entries(RAW_CARD_SHEETS).forEach(([setName, rows], sIdx) => {
+      rows.forEach(([code, name], idx) => {
+        list.push({
+          id: `c_${sIdx}_${idx}_${code}`,
+          set: setName,
+          code,
+          name,
+          price: 0,
+          bind: 0,
+          star: false,
+          qty: 1
+        });
+      });
+    });
+    return list;
+  }
+
+  function createDefaultPool(id, name) {
+    return {
+      id,
+      name,
+      failed80: false,
+      redCodes: [],
+      contact: {
+        line: "",
+        social: "",
+        other: "",
+        note: "請於喊單後留意對帳通知；單筆總金額超過 $2,000 需付 50% 賣貨便訂金。"
+      },
+      setBanners: {},
+      cards: createSampleCards(),
+      orders: [],
+      statusMap: {},
+      chats: {}
+    };
+  }
+
+  function buildDefaultMasterPriceBook(pools = []) {
+    const book = {};
+    Object.entries(RAW_CARD_SHEETS).forEach(([setName, rows]) => {
+      rows.forEach(([code, name]) => {
+        const key = `${setName}::${code}`;
+        book[key] = {
+          set: setName,
+          code,
+          name,
+          price: 0,
+          bind: 0,
+          star: false,
+          qty: 1
+        };
+      });
+    });
+    pools.forEach(p => {
+      (p.cards || []).forEach(c => {
+        if (!c || !c.code) return;
+        const key = `${c.set || ""}::${c.code}`;
+        if (!book[key]) {
+          book[key] = {
+            set: c.set || "",
+            code: c.code,
+            name: c.name || "",
+            price: Number(c.price) || 0,
+            bind: Number(c.bind) || 0,
+            star: Boolean(c.star),
+            qty: Math.max(1, Number(c.qty) || 1)
+          };
+        } else {
+          if ((Number(c.price) || 0) > 0 && book[key].price === 0) book[key].price = Number(c.price) || 0;
+          if ((Number(c.bind) || 0) > 0 && book[key].bind === 0) book[key].bind = Number(c.bind) || 0;
+          if (c.star) book[key].star = true;
+          if (c.name) book[key].name = c.name;
+        }
+      });
+    });
+    return book;
+  }
+
+  let db = {
+    updatedAt: 0,
+    activePoolId: "pool_1",
+    masterPriceBook: buildDefaultMasterPriceBook(),
+    pools: [
+      createDefaultPool("pool_1", "第一盤・併團排卡"),
+      createDefaultPool("pool_2", "第二盤・併團排卡")
+    ]
+  };
+
+  let currentSetFilter = "全部";
+  let selectedCardQtyMap = new Map();
+  let pendingMultiCardId = null;
+  let isAdminAuthed = false;
+  let adminFailCount = 0;
+  let activeAdminDmKey = "";
+  let currentBuyerChatPhone = "";
+  let currentMode = "buyer";
+  let isSubmittingOrder = false;
+  let hasUnsavedChanges = false;
+  let isSyncingCloud = false;
+
+  function getPool() {
+    let p = db.pools.find(x => x.id === db.activePoolId);
+    if (!p) {
+      p = db.pools[0] || createDefaultPool("pool_1", "第一盤・併團排卡");
+      if (!db.pools.length) db.pools.push(p);
+      db.activePoolId = p.id;
+    }
+    return p;
+  }
+
+  // 取得「第幾盤」純前綴文字（例如「第一盤・併團排卡」->「第一盤」）
+  function getPoolRoundTitle(pool) {
+    const raw = String((pool && pool.name) || "本盤").trim();
+    const parts = raw.split(/[・\-－:：|\s]+/).filter(Boolean);
+    return parts[0] || raw;
+  }
+
+  function setCloudBadge(text, err = false) {
+    const el = document.getElementById("cloudStatusBadge");
+    if (!el) return;
+    el.textContent = text;
+    el.style.background = err ? "#ffebee" : "#fff3f8";
+    el.style.color = err ? "#c62828" : "#d81b60";
+  }
+
+  function saveLocal(markUnsaved = true) {
+    if (markUnsaved) hasUnsavedChanges = true;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+      if (hasUnsavedChanges && !isSyncingCloud) {
+        setCloudBadge("💾 本機已存（待同步）");
+      }
+    } catch (_) {
+      setCloudBadge("⚠️ 本機空間已滿", true);
+    }
+  }
+
+  function loadLocal() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.pools) && parsed.pools.length) {
+        const baseBook = buildDefaultMasterPriceBook(parsed.pools);
+        db = {
+          updatedAt: 0,
+          masterPriceBook: { ...baseBook, ...(parsed.masterPriceBook || {}) },
+          ...parsed
+        };
+      }
+    } catch (_) {}
+  }
+
+  async function postWithRetry(url, payloadStr, retries = 2) {
+    let lastErr;
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        await fetch(url, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: payloadStr
+        });
+        return;
+      } catch (err) {
+        lastErr = err;
+        await new Promise(r => setTimeout(r, 400 * (attempt + 1)));
+      }
+    }
+    throw lastErr;
+  }
+
+  async function saveAll(syncCloud = true) {
+    db.updatedAt = Date.now();
+    saveLocal(true);
+    if (!syncCloud || !CLOUD_URL || CLOUD_URL.includes("貼上你的")) {
+      hasUnsavedChanges = false;
+      setCloudBadge("💾 本機已儲存");
+      return;
+    }
+    isSyncingCloud = true;
+    setCloudBadge("☁️ 同步中...");
+    try {
+      await postWithRetry(CLOUD_URL, JSON.stringify(db), 2);
+      hasUnsavedChanges = false;
+      setCloudBadge("☁️ 已送出雲端同步");
+    } catch (_) {
+      setCloudBadge("☁️ 同步異常（保留本機）", true);
+    } finally {
+      isSyncingCloud = false;
+    }
+  }
+
+  // 合併遠端與本機訂單/聊天，降低多裝置同時送單覆蓋風險
+  function mergeRemoteDbSafely(remoteDb) {
+    if (!remoteDb || !Array.isArray(remoteDb.pools)) return remoteDb;
+    const localPoolMap = Object.fromEntries((db.pools || []).map(p => [p.id, p]));
+    remoteDb.pools.forEach(rPool => {
+      const lPool = localPoolMap[rPool.id];
+      if (!lPool) return;
+      const mergedOrdersMap = new Map();
+      (rPool.orders || []).forEach(o => mergedOrdersMap.set(o.id, { ...o }));
+      (lPool.orders || []).forEach(lo => {
+        const ro = mergedOrdersMap.get(lo.id);
+        if (!ro) {
+          mergedOrdersMap.set(lo.id, { ...lo });
+        } else {
+          // 若任一方已標記取消，保留取消狀態
+          if (lo.cancelled && !ro.cancelled) {
+            mergedOrdersMap.set(lo.id, { ...ro, ...lo });
+          }
+        }
+      });
+      rPool.orders = Array.from(mergedOrdersMap.values()).sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+      // 合併聊天訊息並保留已讀狀態
+      const rChats = rPool.chats || {};
+      const lChats = lPool.chats || {};
+      const allChatPhones = new Set([...Object.keys(rChats), ...Object.keys(lChats)]);
+      allChatPhones.forEach(ph => {
+        const rMsgs = rChats[ph] || [];
+        const lMsgs = lChats[ph] || [];
+        const msgMap = new Map();
+        [...rMsgs, ...lMsgs].forEach(m => {
+          const key = m.id || `${m.sender}_${m.time}_${m.text}`;
+          const prev = msgMap.get(key);
+          if (!prev) {
+            msgMap.set(key, { ...m });
+          } else {
+            msgMap.set(key, {
+              ...prev,
+              ...m,
+              readByAdmin: Boolean(prev.readByAdmin || m.readByAdmin),
+              readByBuyer: Boolean(prev.readByBuyer || m.readByBuyer)
+            });
+          }
+        });
+        rChats[ph] = Array.from(msgMap.values());
+      });
+      rPool.chats = rChats;
+    });
+    return remoteDb;
+  }
+
+  async function syncFromCloud(forceApply = false) {
+    if (isSyncingCloud) {
+      alert("目前正在同步中，請稍候再試。");
+      return;
+    }
+    if (forceApply && hasUnsavedChanges) {
+      const ok = confirm("你目前有尚未確認同步完成的本機修改，強制同步可能會覆蓋本機資料，確定要繼續嗎？");
+      if (!ok) return;
+    }
+    if (!CLOUD_URL || CLOUD_URL.includes("貼上你的")) {
+      renderAll();
+      return;
+    }
+    isSyncingCloud = true;
+    setCloudBadge("☁️ 讀取中...");
+    try {
+      const res = await fetch(CLOUD_URL + "?t=" + Date.now(), { cache: "no-store" });
+      const text = await res.text();
+      if (text && text.trim().startsWith("{")) {
+        const parsed = JSON.parse(text);
+        if (parsed && Array.isArray(parsed.pools) && parsed.pools.length) {
+          const remoteTs = Number(parsed.updatedAt) || 0;
+          const localTs = Number(db.updatedAt) || 0;
+          if (forceApply || remoteTs >= localTs || !hasUnsavedChanges) {
+            const merged = mergeRemoteDbSafely(parsed);
+            db = { updatedAt: Math.max(remoteTs, localTs), ...merged };
+            hasUnsavedChanges = false;
+            saveLocal(false);
+            setCloudBadge("☁️ 已送出雲端同步");
+          } else {
+            setCloudBadge("☁️ 本機較新（未覆蓋）");
+          }
+        }
+      }
+    } catch (_) {
+      setCloudBadge("☁️ 離線／本機", true);
+    } finally {
+      isSyncingCloud = false;
+    }
+    renderAll();
+  }
+
+  function normalizePhone(phone) {
+    return String(phone || "").replace(/\D/g, "");
+  }
+
+  function validatePhone(phone) {
+    const clean = normalizePhone(phone);
+    if (!clean) return { valid: false, clean: "", msg: "請輸入 10 碼手機號碼（09xxxxxxxx）", color: "var(--text-muted)" };
+    if (!/^09\d{8}$/.test(clean)) {
+      return { valid: false, clean, msg: "⚠️ 電話格式不正確（需為 09 開頭共 10 碼數字）", color: "#c62828" };
+    }
+    return { valid: true, clean, msg: "✅ 電話格式正確", color: "#2e7d32" };
+  }
+
+  function getBuyerDisplayLabel(info) {
+    const name = String(info?.name || "").trim();
+    const handle = String(info?.handle || "").trim();
+    const phone = normalizePhone(info?.phone || "");
+    if (name) return name;
+    if (handle) return handle;
+    if (phone.length >= 4) return "尾碼" + phone.slice(-4);
+    return "買家";
+  }
+
+  function isRedBuyer(info, pool) {
+    const list = (pool.redCodes || []).map(x => String(x).trim().toLowerCase()).filter(Boolean);
+    if (!list.length) return false;
+    const phone = normalizePhone(info?.phone || "");
+    const name = String(info?.name || "").trim().toLowerCase();
+    const handle = String(info?.handle || "").trim().toLowerCase();
+    return list.some(token => {
+      const cleanNum = token.replace(/\D/g, "");
+      if (cleanNum && phone && phone === cleanNum) return true;
+      if (name && name === token) return true;
+      if (handle && handle === token) return true;
+      return false;
+    });
+  }
+
+  function syncBuyerStatus() {
+    const pool = getPool();
+    const phone = document.getElementById("buyerPhoneInput").value;
+    const name = document.getElementById("buyerNameInput").value.trim();
+    const handle = document.getElementById("buyerHandleInput").value.trim();
+    const check = validatePhone(phone);
+    const hint = document.getElementById("phoneFormatHint");
+    hint.textContent = check.msg;
+    hint.style.color = check.color;
+
+    const el = document.getElementById("buyerStatusPreview");
+    if (!check.valid) {
+      el.textContent = "填寫正確電話後即可排單";
+      el.style.color = "var(--purple-deep)";
+      updateUnreadBadges();
+      return;
+    }
+    const label = getBuyerDisplayLabel({ name, handle, phone: check.clean });
+    const red = isRedBuyer({ name, handle, phone: check.clean }, pool);
+    el.innerHTML = `排單顯示名稱：<span style="color:${red ? "#d50000" : "#6a1b9a"};font-weight:900;">${escapeHtml(label)}${red ? " 🔒" : ""}</span>`;
+    updateUnreadBadges();
+  }
+
+  // 單張排卡明細格式化
+  function formatCardSelectionSummary(entries, sameCardDemandQty = null) {
+    const parts = entries.map(e => {
+      const subPrice = (Number(e.card.price) || 0) * e.qty;
+      const extra = sameCardDemandQty ? `｜同款累計${sameCardDemandQty[e.card.id] || e.qty}張` : "";
+      return `${e.card.code} ${e.card.name} ×${e.qty}張 ($${subPrice}${extra})`;
+    });
+    return { parts };
+  }
+
+  // 單張排卡排序：紅字🔒 ＞ 金額高 ＞ 數量多 ＞ 先喊
+  function sortQueueEntries(entries, pool) {
+    return [...entries].sort((a, b) => {
+      const aRed = isRedBuyer(a, pool) ? 1 : 0;
+      const bRed = isRedBuyer(b, pool) ? 1 : 0;
+      if (aRed !== bRed) return bRed - aRed;
+
+      if (a.orderAmount !== b.orderAmount) return b.orderAmount - a.orderAmount;
+      if (a.orderCount !== b.orderCount) return b.orderCount - a.orderCount;
+      return (a.timestamp || 0) - (b.timestamp || 0);
+    });
+  }
+
+  function getOrderItemEntries(order, cardMap) {
+    const result = [];
+    if (Array.isArray(order.items) && order.items.length) {
+      order.items.forEach(it => {
+        const card = cardMap[it.cardId];
+        const qty = Math.max(1, Math.round(Number(it.qty) || 1));
+        if (card) result.push({ card, qty });
+      });
+      return result;
+    }
+    const counts = {};
+    (order.cardIds || []).forEach(id => {
+      counts[id] = (counts[id] || 0) + 1;
+    });
+    Object.entries(counts).forEach(([id, qty]) => {
+      const card = cardMap[id];
+      if (card) result.push({ card, qty });
+    });
+    return result;
+  }
+
+  function computePoolQueuesAndWinners(pool) {
+    const cardMap = Object.fromEntries((pool.cards || []).map(c => [c.id, c]));
+    const activeOrders = (pool.orders || []).filter(o => !o.cancelled);
+    const queues = {};
+    const sameCardDemandQty = {};
+    (pool.cards || []).forEach(c => {
+      queues[c.id] = [];
+      sameCardDemandQty[c.id] = 0;
+    });
+
+    activeOrders.forEach(order => {
+      const entries = getOrderItemEntries(order, cardMap);
+      const orderAmount = entries.reduce((sum, e) => sum + (Number(e.card.price) || 0) * e.qty, 0);
+      const orderCount = entries.reduce((sum, e) => sum + e.qty, 0);
+
+      entries.forEach(({ card, qty }) => {
+        sameCardDemandQty[card.id] = (sameCardDemandQty[card.id] || 0) + qty;
+        if (queues[card.id]) {
+          for (let k = 0; k < qty; k++) {
+            queues[card.id].push({
+              orderId: order.id,
+              platform: order.platform || "DC",
+              handle: order.handle || "",
+              name: order.name || "",
+              phone: order.phone || "",
+              bindText: order.bindText || "無需自選綁物",
+              gachaText: order.gachaText || "無加購",
+              gachaFee: Number(order.gachaFee) || 0,
+              note: order.note || "",
+              paid: Boolean(order.paid),
+              shipped: Boolean(order.shipped),
+              orderAmount,
+              orderCount,
+              timestamp: order.timestamp || 0,
+              timeStr: order.timeStr || ""
+            });
+          }
+        }
+      });
+    });
+
+    const sortedQueues = {};
+    const wonQtyByCardAndOrder = {};
+    (pool.cards || []).forEach(c => {
+      const sorted = sortQueueEntries(queues[c.id] || [], pool);
+      sortedQueues[c.id] = sorted;
+      const stock = Math.max(0, Number(c.qty) || 0);
+      const winMap = {};
+      if (!pool.failed80) {
+        sorted.slice(0, stock).forEach(entry => {
+          winMap[entry.orderId] = (winMap[entry.orderId] || 0) + 1;
+        });
+      }
+      wonQtyByCardAndOrder[c.id] = winMap;
+    });
+
+    return { sortedQueues, wonQtyByCardAndOrder, sameCardDemandQty, activeOrders, cardMap };
+  }
+
+  function switchMode(mode) {
+    if (mode === "admin" && !isAdminAuthed) {
+      openAdminLogin();
+      return;
+    }
+    currentMode = mode;
+    document.getElementById("panel-buyer").classList.toggle("active", mode === "buyer");
+    document.getElementById("panel-queue").classList.toggle("active", mode === "queue");
+    document.getElementById("panel-master").classList.toggle("active", mode === "master");
+    document.getElementById("panel-admin").classList.toggle("active", mode === "admin");
+
+    document.getElementById("tabBuyer").classList.toggle("active", mode === "buyer");
+    document.getElementById("tabQueue").classList.toggle("active", mode === "queue");
+    document.getElementById("tabMaster").classList.toggle("active", mode === "master");
+    document.getElementById("tabAdmin").classList.toggle("active", mode === "admin");
+    renderAll();
+  }
+
+  function selectPool(poolId) {
+    db.activePoolId = poolId;
+    currentSetFilter = "全部";
+    selectedCardQtyMap.clear();
+    saveLocal();
+    renderAll();
+  }
+
+  function renderPoolTabs() {
+    const box = document.getElementById("poolTabs");
+    box.innerHTML = db.pools.map(p => `
+      <button class="pool-tab ${p.id === db.activePoolId ? "active" : ""}" onclick="selectPool('${escapeAttr(p.id)}')">
+        ${escapeHtml(p.name)}
+      </button>
+    `).join("");
+  }
+
+  function renderBannerAndStats() {
+    const pool = getPool();
+    document.getElementById("pageTitle").textContent = `呷嘎的秘密偶像公主排拆系統・${pool.name}`;
+    document.getElementById("adminPoolName").textContent = pool.name;
+
+    const totalCardsQty = (pool.cards || []).reduce((s, c) => s + Math.max(0, Number(c.qty) || 0), 0);
+    const { wonQtyByCardAndOrder, activeOrders } = computePoolQueuesAndWinners(pool);
+    const soldQty = Object.values(wonQtyByCardAndOrder).reduce((s, m) => s + Object.values(m).reduce((a, b) => a + b, 0), 0);
+    const rate = totalCardsQty > 0 ? Math.round((soldQty / totalCardsQty) * 100) : 0;
+    const autoFailed80 = totalCardsQty > 0 && (100 - rate) >= 80;
+    const isFailed = Boolean(pool.failed80);
+
+    const failBtn = document.getElementById("toggleFailed80Btn");
+    if (failBtn) {
+      failBtn.textContent = isFailed ? "✅ 解除全盤失敗標記" : "⚠️ 標記全盤失敗（流盤）";
+    }
+
+    document.getElementById("poolStatsBanner").innerHTML = `
+      <div class="stat-box">
+        <div class="stat-label">目前盤面</div>
+        <div class="stat-val" style="color:var(--purple-deep);">${escapeHtml(pool.name)}</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">有效喊單筆數</div>
+        <div class="stat-val" style="color:var(--pink-deep);">${activeOrders.length} 筆</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">已配出／總庫存</div>
+        <div class="stat-val">${soldQty} / ${totalCardsQty} 張（${rate}%）</div>
+        <div class="progress-wrap"><div class="progress-bar" style="width:${rate}%;"></div></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">成團狀態（未售出達80%失敗）</div>
+        <div class="stat-val" style="color:${(isFailed || autoFailed80) ? "#c62828" : "#2e7d32"};font-size:15px;">
+          ${isFailed ? "🚫 已標記全盤失敗（流盤）" : (autoFailed80 ? "⚠️ 未售出≥80%（全盤失敗警示）" : "✅ 進行中")}
+        </div>
+      </div>
+    `;
+
+    const c = pool.contact || {};
+    const parts = [];
+    if (c.line) parts.push(`LINE：<b>${escapeHtml(c.line)}</b>`);
+    if (c.social) parts.push(`IG/DC/賣場：<b>${escapeHtml(c.social)}</b>`);
+    if (c.other) parts.push(`其他：<b>${escapeHtml(c.other)}</b>`);
+    if (c.note) parts.push(`提醒：${escapeHtml(c.note)}`);
+    const contactHtml = parts.length ? parts.join("｜") : "老闆聯絡方式尚未填寫，可至「老闆後台」設定。";
+    document.getElementById("buyerContactDisplay").innerHTML = `📩 <b>老闆聯絡與對帳資訊：</b>${contactHtml}`;
+    document.getElementById("modalContactBlock").innerHTML = `📩 <b>老闆聯絡與對帳資訊：</b>${contactHtml}`;
+  }
+
+  async function toggleFailed80Status() {
+    const pool = getPool();
+    pool.failed80 = !pool.failed80;
+    await saveAll(true);
+    renderAll();
+  }
+
+  function renderSetChips() {
+    const pool = getPool();
+    const avail = getBindPoolAvailability(pool);
+    const box = document.getElementById("setFilterChips");
+    box.innerHTML = SETS.map(s => {
+      if (s === "綁物") {
+        const tag = avail.soldOut ? "（已售完）" : `（剩${avail.remainingStock}張）`;
+        const extraStyle = currentSetFilter === s
+          ? "background:#1565c0;border-color:#1565c0;color:#fff;"
+          : "background:#e3f2fd;border-color:#90caf9;color:#1565c0;";
+        return `<button class="filter-chip ${currentSetFilter === s ? "active" : ""}" style="${extraStyle}" onclick="setFilter('綁物')">💙 綁物${tag}</button>`;
+      }
+      return `<button class="filter-chip ${currentSetFilter === s ? "active" : ""}" onclick="setFilter('${escapeAttr(s)}')">${escapeHtml(s)}</button>`;
+    }).join("");
+  }
+
+  function setFilter(s) {
+    currentSetFilter = s;
+    renderSetChips();
+    renderCards();
+  }
+
+  function renderSetBanner() {
+    const pool = getPool();
+    const box = document.getElementById("setBannerBox");
+    const imgUrl = currentSetFilter !== "全部" ? (pool.setBanners || {})[currentSetFilter] : "";
+    if (!imgUrl) {
+      box.innerHTML = "";
+      return;
+    }
+    box.innerHTML = `
+      <div class="set-banner">
+        <div style="font-weight:800;font-size:13.5px;color:var(--purple-deep);">🖼️ ${escapeHtml(currentSetFilter)} 整彈大圖</div>
+        <img src="${escapeAttr(imgUrl)}" alt="${escapeAttr(currentSetFilter)}" />
+      </div>
+    `;
+  }
+
+  function handleCardClick(cardId) {
+    const pool = getPool();
+    const card = (pool.cards || []).find(c => c.id === cardId);
+    if (!card) return;
+    const maxQty = Math.max(1, Number(card.qty) || 1);
+
+    if (maxQty > 1) {
+      openMultiQtyModal(card, maxQty);
+      return;
+    }
+
+    if (selectedCardQtyMap.has(cardId)) {
+      selectedCardQtyMap.delete(cardId);
+    } else {
+      selectedCardQtyMap.set(cardId, 1);
+    }
+    renderCards();
+    updateCartDock();
+  }
+
+  function openMultiQtyModal(card, maxQty) {
+    pendingMultiCardId = card.id;
+    const currentPicked = selectedCardQtyMap.get(card.id) || 1;
+    document.getElementById("multiQtyCardInfo").innerHTML = `
+      <div><b>${escapeHtml(card.set || "")}・${escapeHtml(card.code || "")}</b></div>
+      <div style="font-size:15px;font-weight:800;color:var(--pink-deep);margin-top:2px;">${escapeHtml(card.name || "")}</div>
+      <div style="margin-top:4px;">單價：🌙 <b>$${Number(card.price) || 0}</b>${(Number(card.bind) || 0) > 0 ? `｜綁物：💙 <b>$${Number(card.bind)}</b>` : ""}</div>
+    `;
+    const inp = document.getElementById("multiQtyInput");
+    inp.max = String(maxQty);
+    inp.value = String(Math.min(maxQty, Math.max(1, currentPicked)));
+    document.getElementById("multiQtyMaxLabel").textContent = `（可選 1 ~ ${maxQty} 張）`;
+    document.getElementById("multiQtyRemoveBtn").style.display = selectedCardQtyMap.has(card.id) ? "inline-flex" : "none";
+    document.getElementById("multiQtyModal").classList.add("open");
+    setTimeout(() => inp.focus(), 50);
+  }
+
+  function confirmMultiQtyCard() {
+    if (!pendingMultiCardId) return;
+    const pool = getPool();
+    const card = (pool.cards || []).find(c => c.id === pendingMultiCardId);
+    if (!card) return;
+    const maxQty = Math.max(1, Number(card.qty) || 1);
+    const val = Math.round(Number(document.getElementById("multiQtyInput").value) || 0);
+    if (val <= 0) {
+      selectedCardQtyMap.delete(card.id);
+    } else {
+      selectedCardQtyMap.set(card.id, Math.min(maxQty, val));
+    }
+    pendingMultiCardId = null;
+    closeModal("multiQtyModal");
+    renderCards();
+    updateCartDock();
+  }
+
+  function removeMultiQtyCard() {
+    if (!pendingMultiCardId) return;
+    selectedCardQtyMap.delete(pendingMultiCardId);
+    pendingMultiCardId = null;
+    closeModal("multiQtyModal");
+    renderCards();
+    updateCartDock();
+  }
+
+  function clearSelection() {
+    selectedCardQtyMap.clear();
+    renderCards();
+    updateCartDock();
+  }
+
+  function getSelectedEntries(pool) {
+    const cardMap = Object.fromEntries((pool.cards || []).map(c => [c.id, c]));
+    const list = [];
+    selectedCardQtyMap.forEach((qty, cardId) => {
+      const card = cardMap[cardId];
+      const safeQty = Math.max(0, Math.round(Number(qty) || 0));
+      if (card && safeQty > 0) {
+        list.push({ card, qty: safeQty });
+      }
+    });
+    return list;
+  }
+
+  // 計算綁物組別剩餘可挑張數（扣除已得標/有效排單佔用）
+  function getBindPoolAvailability(pool) {
+    const { wonQtyByCardAndOrder } = computePoolQueuesAndWinners(pool);
+    const bindCards = (pool.cards || []).filter(c => c.set === "綁物");
+    let totalStock = 0;
+    let remainingStock = 0;
+    bindCards.forEach(c => {
+      const stock = Math.max(0, Number(c.qty) || 0);
+      const taken = Object.values(wonQtyByCardAndOrder[c.id] || {}).reduce((a, b) => a + b, 0);
+      const rem = Math.max(0, stock - taken);
+      totalStock += stock;
+      remainingStock += rem;
+    });
+    return {
+      hasBindCards: bindCards.length > 0,
+      totalStock,
+      remainingStock,
+      soldOut: remainingStock <= 0
+    };
+  }
+
+  // 計算目前勾選卡片的需綁張數、已選綁卡張數與是否達標
+  function evaluateSelectionBinding(pool, pickedEntries) {
+    const mainEntries = pickedEntries.filter(e => e.card.set !== "綁物");
+    const bindEntries = pickedEntries.filter(e => e.card.set === "綁物");
+    const requiredBindQty = mainEntries.reduce((s, e) => s + Math.max(0, Math.round(Number(e.card.bind) || 0)) * e.qty, 0);
+    const selectedBindQty = bindEntries.reduce((s, e) => s + e.qty, 0);
+    const avail = getBindPoolAvailability(pool);
+    const shortage = Math.max(0, requiredBindQty - selectedBindQty);
+    const canBypassSoldOut = requiredBindQty > 0 && avail.soldOut;
+    const isSatisfied = requiredBindQty === 0 || selectedBindQty >= requiredBindQty || canBypassSoldOut;
+    return {
+      mainEntries,
+      bindEntries,
+      requiredBindQty,
+      selectedBindQty,
+      shortage,
+      avail,
+      canBypassSoldOut,
+      isSatisfied
+    };
+  }
+
+  function jumpToBindCategory() {
+    closeModal("checkoutModal");
+    switchMode("buyer");
+    setFilter("綁物");
+    const grid = document.getElementById("cardGrid");
+    if (grid) grid.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function renderCards() {
+    const pool = getPool();
+    renderSetBanner();
+    const { sortedQueues, sameCardDemandQty } = computePoolQueuesAndWinners(pool);
+    const onlyStar = document.getElementById("onlyStarFilter").checked;
+    const onlyAvail = document.getElementById("onlyAvailableFilter").checked;
+    const kw = document.getElementById("searchCardInput").value.trim().toLowerCase();
+
+    const filtered = (pool.cards || []).filter(c => {
+      if (currentSetFilter !== "全部" && c.set !== currentSetFilter) return false;
+      if (onlyStar && !c.star) return false;
+      const q = sortedQueues[c.id] || [];
+      if (onlyAvail && (q.length > 0 || (Number(c.qty) || 0) <= 0)) return false;
+      if (kw) {
+        const hay = `${c.set || ""} ${c.code || ""} ${c.name || ""}`.toLowerCase();
+        if (!hay.includes(kw)) return false;
+      }
+      return true;
+    });
+
+    const grid = document.getElementById("cardGrid");
+    if (!filtered.length) {
+      grid.innerHTML = `<div class="box-card" style="grid-column:1/-1;text-align:center;">沒有符合篩選條件的卡片。</div>`;
+      return;
+    }
+
+    grid.innerHTML = filtered.map(c => {
+      const pickedQty = selectedCardQtyMap.get(c.id) || 0;
+      const selected = pickedQty > 0;
+      const q = sortedQueues[c.id] || [];
+      const qty = Math.max(0, Number(c.qty) || 0);
+      const demandTotal = sameCardDemandQty[c.id] || 0;
+      const hasQueue = q.length > 0;
+      const tagsHtml = q.map((item, idx) => {
+        const red = isRedBuyer(item, pool);
+        const buyerLabel = getBuyerDisplayLabel(item);
+        return `<span class="code-tag ${red ? "code-red" : "code-purple"}">#${idx + 1} ${escapeHtml(buyerLabel)}${red ? "🔒" : ""}</span>`;
+      }).join("");
+
+      const reqBind = Math.max(0, Math.round(Number(c.bind) || 0));
+      const isBindSet = c.set === "綁物";
+      const bindPillHtml = reqBind > 0
+        ? `<span class="bind-blue" style="cursor:pointer;" onclick="event.stopPropagation();setFilter('綁物')" title="點擊前往綁物組別挑卡">💙 需綁 ${reqBind} 張</span>`
+        : (isBindSet ? `<span class="bind-blue">💙 可作綁卡</span>` : "");
+
+      return `
+        <div class="idol-card ${selected ? "selected" : ""} ${hasQueue ? "has-queue" : ""}" onclick="handleCardClick('${escapeAttr(c.id)}')">
+          ${c.star ? `<span class="star-badge">⭐️ 熱貴</span>` : (isBindSet ? `<span class="star-badge" style="background:linear-gradient(135deg,#64b5f6,#9575cd);color:#fff;">💙 綁物</span>` : "")}
+          <span class="qty-badge">${selected ? `已選 ${pickedQty} 張｜` : ""}名額 ${qty} 張</span>
+          <div class="card-thumb">
+            <span class="card-code">${escapeHtml(c.set || "")}・${escapeHtml(c.code || "")}</span>
+            <div class="card-name">${escapeHtml(c.name || "")}${reqBind > 0 ? ` <span style="color:var(--blue-bind);font-size:11.5px;">（需綁${reqBind}張）</span>` : ""}</div>
+            <span class="same-demand-pill">${demandTotal > 0 ? `已有 ${demandTotal} 張排單（可繼續排）` : "尚無人排單・快搶首順位"}</span>
+          </div>
+          <div class="price-row">
+            <span class="price-moon">🌙 $${Number(c.price) || 0}</span>
+            ${bindPillHtml}
+          </div>
+          <div class="queue-codes">${tagsHtml || `<span style="font-size:11px;color:var(--text-muted);">尚無排單</span>`}</div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function updateCartDock() {
+    const pool = getPool();
+    const pickedEntries = getSelectedEntries(pool);
+    const dock = document.getElementById("cartSummaryText");
+
+    if (!pickedEntries.length) {
+      dock.innerHTML = `尚未勾選卡片｜名字隨意填、電話必填`;
+      return;
+    }
+
+    const totalQty = pickedEntries.reduce((s, e) => s + e.qty, 0);
+    const bindEval = evaluateSelectionBinding(pool, pickedEntries);
+    const mainSum = bindEval.mainEntries.reduce((s, e) => s + (Number(e.card.price) || 0) * e.qty, 0);
+    const bindCardSum = bindEval.bindEntries.reduce((s, e) => s + (Number(e.card.price) || 0) * e.qty, 0);
+
+    let bindHint = "";
+    if (bindEval.requiredBindQty > 0) {
+      if (bindEval.canBypassSoldOut) {
+        bindHint = `｜<span style="color:#2e7d32;">💙 綁物已售完（可直接下單）</span>`;
+      } else if (bindEval.shortage > 0) {
+        bindHint = `｜<span style="color:#c62828;">💙 需綁 ${bindEval.requiredBindQty} 張（已選 ${bindEval.selectedBindQty}，差 ${bindEval.shortage} 張）</span> <button type="button" class="btn btn-soft btn-sm" style="padding:2px 7px;font-size:11px;color:#1565c0;border-color:#90caf9;" onclick="setFilter('綁物')">去選綁物</button>`;
+      } else {
+        bindHint = `｜<span style="color:#2e7d32;">💙 綁卡已達標（${bindEval.selectedBindQty}/${bindEval.requiredBindQty}張）</span>`;
+      }
+    }
+
+    dock.innerHTML = `
+      已選 <strong>${totalQty}</strong> 張｜
+      主卡 <b>$${mainSum}</b>${bindCardSum > 0 ? `＋綁卡 <b>$${bindCardSum}</b>` : ""}${bindHint}
+    `;
+  }
+
+  function openCheckoutModal() {
+    const phoneCheck = validatePhone(document.getElementById("buyerPhoneInput").value);
+    if (!phoneCheck.valid) {
+      alert(phoneCheck.msg);
+      document.getElementById("buyerPhoneInput").focus();
+      return;
+    }
+    const pool = getPool();
+    const pickedEntries = getSelectedEntries(pool);
+    if (!pickedEntries.length) {
+      alert("請先勾選想排的卡片！");
+      return;
+    }
+
+    document.getElementById("generatedOrderOutput").style.display = "none";
+    document.getElementById("gachaAddonType").value = "none";
+    document.getElementById("gachaCountInput").value = 1;
+    document.getElementById("orderNoteInput").value = "";
+    refreshCheckoutModal();
+    document.getElementById("checkoutModal").classList.add("open");
+  }
+
+  function refreshCheckoutModal() {
+    const pool = getPool();
+    const { sameCardDemandQty } = computePoolQueuesAndWinners(pool);
+    const pickedEntries = getSelectedEntries(pool);
+    const totalQty = pickedEntries.reduce((s, e) => s + e.qty, 0);
+    const name = document.getElementById("buyerNameInput").value.trim() || "未填暱稱";
+    const phone = validatePhone(document.getElementById("buyerPhoneInput").value).clean;
+    const platform = document.getElementById("buyerPlatformSelect").value;
+    const handle = document.getElementById("buyerHandleInput").value.trim();
+
+    const bindEval = evaluateSelectionBinding(pool, pickedEntries);
+    const gachaType = document.getElementById("gachaAddonType").value;
+    const gachaRow = document.getElementById("gachaCountRow");
+    gachaRow.style.display = (gachaType === "gacha250" || gachaType === "gacha100") ? "block" : "none";
+
+    const count = Math.max(1, Math.round(Number(document.getElementById("gachaCountInput").value) || 1));
+    let gachaFee = 0;
+    if (gachaType === "gacha250") gachaFee = count * 250;
+    else if (gachaType === "gacha100") gachaFee = count * 100;
+
+    const mainCardFee = bindEval.mainEntries.reduce((s, e) => s + (Number(e.card.price) || 0) * e.qty, 0);
+    const bindCardFee = bindEval.bindEntries.reduce((s, e) => s + (Number(e.card.price) || 0) * e.qty, 0);
+    const total = mainCardFee + bindCardFee + gachaFee;
+
+    let bindLabel = "無需綁卡";
+    if (bindEval.requiredBindQty > 0) {
+      if (bindEval.canBypassSoldOut) {
+        bindLabel = `需綁 ${bindEval.requiredBindQty} 張（綁物已售完・免綁直接下單）`;
+      } else {
+        bindLabel = `需綁 ${bindEval.requiredBindQty} 張（已選 ${bindEval.selectedBindQty} 張綁卡）`;
+      }
+    } else if (bindEval.selectedBindQty > 0) {
+      bindLabel = `加購綁物組別 ${bindEval.selectedBindQty} 張`;
+    }
+
+    const bindStatusBox = document.getElementById("checkoutBindStatus");
+    if (bindStatusBox) {
+      if (bindEval.requiredBindQty === 0) {
+        bindStatusBox.innerHTML = `<span style="color:#2e7d32;font-weight:700;">✅ 目前勾選卡片無需綁物（若想額外加購也可點右上角前往「綁物」組別挑選）。</span>`;
+      } else if (bindEval.canBypassSoldOut) {
+        bindStatusBox.innerHTML = `<span style="color:#2e7d32;font-weight:800;">✅ 本次需綁 <b>${bindEval.requiredBindQty}</b> 張，但目前「綁物」組別卡片已全數售完，可直接送出訂單！</span>`;
+      } else if (bindEval.shortage > 0) {
+        bindStatusBox.innerHTML = `<span style="color:#c62828;font-weight:800;">⚠️ 本次共需綁 <b>${bindEval.requiredBindQty}</b> 張，目前已選 <b>${bindEval.selectedBindQty}</b> 張綁卡，還差 <b>${bindEval.shortage}</b> 張（綁物組別尚有 ${bindEval.avail.remainingStock} 張可挑）！</span>`;
+      } else {
+        bindStatusBox.innerHTML = `<span style="color:#2e7d32;font-weight:800;">✅ 已達成綁物條件（需綁 ${bindEval.requiredBindQty} 張 / 已選 ${bindEval.selectedBindQty} 張綁卡）。</span>`;
+      }
+    }
+
+    const submitBtn = document.getElementById("submitOrderBtn");
+    if (submitBtn) {
+      submitBtn.disabled = !bindEval.isSatisfied;
+      submitBtn.textContent = bindEval.isSatisfied
+        ? "✅ 送出排單並生成文字"
+        : `🔒 尚差 ${bindEval.shortage} 張綁卡才能送出`;
+    }
+
+    const mainSummary = formatCardSelectionSummary(bindEval.mainEntries, sameCardDemandQty);
+    const bindSummary = formatCardSelectionSummary(bindEval.bindEntries, sameCardDemandQty);
+    const detailItemsHtml = [
+      ...mainSummary.parts.map(line => `<li>${escapeHtml(line)}</li>`),
+      ...bindSummary.parts.map(line => `<li style="color:var(--blue-bind);font-weight:700;">【自選綁卡】${escapeHtml(line)}</li>`)
+    ].join("");
+
+    document.getElementById("checkoutDetail").innerHTML = `
+      <div><strong>${escapeHtml(platform)}：</strong>${escapeHtml(handle || "-")}｜<strong>名字：</strong>${escapeHtml(name)}｜<strong>電話：</strong>${escapeHtml(phone)}</div>
+      <div style="margin-top:4px;"><strong>方式：</strong>單張排卡｜<strong>綁物狀態：</strong>${escapeHtml(bindLabel)}</div>
+      <div style="margin-top:6px;"><strong>勾選卡片明細（共 ${totalQty} 張）：</strong><ul style="margin:4px 0 0 18px;padding:0;">${detailItemsHtml}</ul></div>
+      <div style="margin-top:8px;">
+        <strong>金額試算：</strong>
+        主卡 $${mainCardFee} ＋ 自選綁卡 $${bindCardFee} ＋ 盲包/抽抽樂加購 $${gachaFee} ＝
+        <b style="color:var(--pink-deep);font-size:15px;">$${total}</b>
+      </div>
+    `;
+
+    const alerts = [];
+    if (pool.failed80) {
+      alerts.push(`<div class="alert-box">🚫 本盤目前已被標記為「全盤失敗（流盤）」，送出後僅供紀錄參考。</div>`);
+    }
+    if (!bindEval.isSatisfied) {
+      alerts.push(`<div class="alert-box">🔒 尚未達到綁物張數（需綁 ${bindEval.requiredBindQty} 張，目前僅選 ${bindEval.selectedBindQty} 張），請點上方「💙 前往『綁物』組別挑卡」補齊後再送出訂單！</div>`);
+    }
+    if (total > 2000) {
+      alerts.push(`<div class="deposit-box">💰 總金額超過 $2,000（目前 $${total}），需付 50% 訂金：$${Math.ceil(total * 0.5)}（賣貨便方式）。</div>`);
+    }
+    document.getElementById("checkoutAlerts").innerHTML = alerts.join("");
+  }
+
+  async function submitBuyerOrder() {
+    if (isSubmittingOrder) return;
+    const pool = getPool();
+    const phoneCheck = validatePhone(document.getElementById("buyerPhoneInput").value);
+    if (!phoneCheck.valid) {
+      alert(phoneCheck.msg);
+      return;
+    }
+    const pickedEntries = getSelectedEntries(pool);
+    if (!pickedEntries.length) {
+      alert("尚未勾選卡片！");
+      return;
+    }
+
+    isSubmittingOrder = true;
+    const btn = document.getElementById("submitOrderBtn");
+    if (btn) btn.disabled = true;
+
+    try {
+      if (CLOUD_URL && !CLOUD_URL.includes("貼上你的") && !isSyncingCloud) {
+        try {
+          const res = await fetch(CLOUD_URL + "?t=" + Date.now(), { cache: "no-store" });
+          const text = await res.text();
+          if (text && text.trim().startsWith("{")) {
+            const parsed = JSON.parse(text);
+            if (parsed && Array.isArray(parsed.pools) && parsed.pools.length) {
+              const remoteTs = Number(parsed.updatedAt) || 0;
+              const merged = mergeRemoteDbSafely(parsed);
+              db = { updatedAt: Math.max(remoteTs, Number(db.updatedAt) || 0), ...merged };
+              saveLocal(false);
+            }
+          }
+        } catch (_) {}
+      }
+      const latestPool = getPool();
+      const phone = phoneCheck.clean;
+      const name = document.getElementById("buyerNameInput").value.trim() || "買家";
+      const platform = document.getElementById("buyerPlatformSelect").value;
+      const handle = document.getElementById("buyerHandleInput").value.trim();
+
+      const latestBindEval = evaluateSelectionBinding(latestPool, pickedEntries);
+      if (!latestBindEval.isSatisfied) {
+        alert(`尚未達到綁物張數！本次需綁 ${latestBindEval.requiredBindQty} 張，目前已選 ${latestBindEval.selectedBindQty} 張綁卡（還差 ${latestBindEval.shortage} 張），請至「💙 綁物」組別補齊後再送出！`);
+        return;
+      }
+
+      const bindType = latestBindEval.requiredBindQty > 0
+        ? (latestBindEval.canBypassSoldOut ? "soldout_bypass" : "self_cards")
+        : (latestBindEval.selectedBindQty > 0 ? "self_cards" : "none");
+      let bindText = "無需綁卡";
+      if (latestBindEval.requiredBindQty > 0) {
+        bindText = latestBindEval.canBypassSoldOut
+          ? `需綁${latestBindEval.requiredBindQty}張（綁物已售完直接下單）`
+          : `需綁${latestBindEval.requiredBindQty}張（已選${latestBindEval.selectedBindQty}張綁卡）`;
+      } else if (latestBindEval.selectedBindQty > 0) {
+        bindText = `加購綁物${latestBindEval.selectedBindQty}張`;
+      }
+
+      const gachaType = document.getElementById("gachaAddonType").value;
+      const count = Math.max(1, Math.round(Number(document.getElementById("gachaCountInput").value) || 1));
+      let gachaFee = 0;
+      let gachaText = "無加購";
+      if (gachaType === "gacha250") {
+        gachaFee = count * 250;
+        gachaText = `盲包①($250)×${count} ($${gachaFee})`;
+      } else if (gachaType === "gacha100") {
+        gachaFee = count * 100;
+        gachaText = `盲包②($100)×${count} ($${gachaFee})`;
+      }
+
+      const note = document.getElementById("orderNoteInput").value.trim();
+      const now = new Date();
+      const timeStr = now.toLocaleString("zh-TW", { hour12: false });
+
+      const expandedIds = [];
+      const itemsPayload = pickedEntries.map(e => {
+        for (let k = 0; k < e.qty; k++) expandedIds.push(e.card.id);
+        return { cardId: e.card.id, qty: e.qty };
+      });
+
+      const newOrder = {
+        id: "ord_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+        platform,
+        handle,
+        name,
+        phone,
+        mode: "single",
+        items: itemsPayload,
+        cardIds: expandedIds,
+        bindType,
+        bindText,
+        gachaType,
+        gachaText,
+        gachaFee,
+        note,
+        paid: false,
+        shipped: false,
+        cancelled: false,
+        timestamp: now.getTime(),
+        timeStr
+      };
+
+      latestPool.orders.push(newOrder);
+      selectedCardQtyMap.clear();
+      await saveAll(true);
+      renderAll();
+
+      const { sameCardDemandQty } = computePoolQueuesAndWinners(latestPool);
+      const totalQty = pickedEntries.reduce((s, e) => s + e.qty, 0);
+      const mainCardFee = latestBindEval.mainEntries.reduce((s, e) => s + (Number(e.card.price) || 0) * e.qty, 0);
+      const bindCardFee = latestBindEval.bindEntries.reduce((s, e) => s + (Number(e.card.price) || 0) * e.qty, 0);
+      const total = mainCardFee + bindCardFee + gachaFee;
+
+      const summary = formatCardSelectionSummary(pickedEntries, sameCardDemandQty);
+      const cardSummaryLines = summary.parts.join("、");
+
+      const lines = [
+        `【呷嘎的秘密偶像公主排拆系統・${latestPool.name} 喊單明細】`,
+        `社群：${platform} (${handle || "-"})`,
+        `名字：${name}｜電話：${phone}`,
+        `卡片（共${totalQty}張）：${cardSummaryLines}`,
+        `綁物狀態：${bindText}${bindCardFee > 0 ? `（自選綁卡金額 $${bindCardFee}）` : ""}`,
+        `盲包/抽抽樂加購：${gachaText}`,
+        `合計金額：$${total}${total > 2000 ? `（超過$2,000需付50%訂金 $${Math.ceil(total * 0.5)}）` : ""}`,
+        note ? `備註：${note}` : "",
+        `時間：${timeStr}`
+      ].filter(Boolean).join("\n");
+
+      document.getElementById("orderCopyText").value = lines;
+      document.getElementById("generatedOrderOutput").style.display = "block";
+    } finally {
+      setTimeout(() => {
+        isSubmittingOrder = false;
+        if (btn) btn.disabled = false;
+      }, 600);
+    }
+  }
+
+  function copyTextSafe(text, successMsg = "已複製！") {
+    if (!text) return;
+    const fallbackCopy = () => {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      let ok = false;
+      try {
+        ok = document.execCommand("copy");
+      } catch (_) {
+        ok = false;
+      }
+      document.body.removeChild(ta);
+      if (ok) {
+        alert(successMsg);
+      } else {
+        alert("瀏覽器限制自動複製，請手動全選文字後按複製。");
+      }
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(() => alert(successMsg))
+        .catch(() => fallbackCopy());
+    } else {
+      fallbackCopy();
+    }
+  }
+
+  function copyOrderText() {
+    const ta = document.getElementById("orderCopyText");
+    ta.focus();
+    ta.select();
+    copyTextSafe(ta.value, "已複製喊單明細！");
+  }
+
+  function renderQueueTable() {
+    const pool = getPool();
+    const { sortedQueues, sameCardDemandQty } = computePoolQueuesAndWinners(pool);
+    const tbody = document.getElementById("queueTableBody");
+
+    tbody.innerHTML = (pool.cards || []).map(c => {
+      const q = sortedQueues[c.id] || [];
+      const qty = Math.max(0, Number(c.qty) || 0);
+      const demandTotal = sameCardDemandQty[c.id] || 0;
+      const qHtml = q.length
+        ? q.map((item, i) => {
+            const red = isRedBuyer(item, pool);
+            const isWin = !pool.failed80 && i < qty;
+            const buyerLabel = getBuyerDisplayLabel(item);
+            return `
+              <div style="margin-bottom:3px;">
+                <span class="${pool.failed80 ? "tag-cancel" : (isWin ? "tag-win" : "tag-wait")}">${pool.failed80 ? "全盤流盤" : (isWin ? "得標" : "候補")} #${i + 1}</span>
+                <span class="${red ? "code-red" : "code-purple"}" style="font-weight:800;">${escapeHtml(buyerLabel)}${red ? "🔒" : ""}</span>
+                <span>（${escapeHtml(item.phone || "")}）</span>
+              </div>
+            `;
+          }).join("")
+        : `<span style="color:var(--text-muted);">尚無人排單</span>`;
+
+      return `
+        <tr>
+          <td><b>${escapeHtml(c.set || "")}</b><br>${escapeHtml(c.code || "")}</td>
+          <td>${c.star ? "⭐️ " : ""}<b>${escapeHtml(c.name || "")}</b></td>
+          <td>🌙 $${Number(c.price) || 0}${(Number(c.bind) || 0) > 0 ? `<br><span class="bind-blue">💙 需綁 ${Number(c.bind)} 張</span>` : (c.set === "綁物" ? `<br><span class="bind-blue">💙 綁物組別</span>` : "")}</td>
+          <td>庫存：<b>${qty}</b><br><span style="font-size:11.5px;color:var(--purple-deep);">同款已挑：${demandTotal} 張</span></td>
+          <td>${qHtml}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  // 統一對帳／寄件狀態計算（以每筆訂單為主，並兼容舊版 statusMap）
+  function getBuyerUnifiedStatus(pool, phoneKey) {
+    const orders = (pool.orders || []).filter(o => !o.cancelled && normalizePhone(o.phone) === phoneKey);
+    const legacy = ((pool.statusMap || {})[phoneKey]) || { paid: false, shipped: false };
+    if (!orders.length) return { paid: Boolean(legacy.paid), shipped: Boolean(legacy.shipped), partialShipped: false };
+
+    const anyOrderHasField = orders.some(o => typeof o.paid === "boolean" || typeof o.shipped === "boolean");
+    if (!anyOrderHasField) {
+      return { paid: Boolean(legacy.paid), shipped: Boolean(legacy.shipped), partialShipped: false };
+    }
+
+    const paidCount = orders.filter(o => Boolean(o.paid)).length;
+    const shippedCount = orders.filter(o => Boolean(o.shipped)).length;
+    return {
+      paid: paidCount === orders.length,
+      shipped: shippedCount === orders.length,
+      partialShipped: shippedCount > 0 && shippedCount < orders.length,
+      shippedCount,
+      totalOrders: orders.length
+    };
+  }
+
+  function computeBuyerStats(pool) {
+    const { wonQtyByCardAndOrder, activeOrders, cardMap } = computePoolQueuesAndWinners(pool);
+    const map = {};
+
+    activeOrders.forEach(o => {
+      const key = normalizePhone(o.phone) || o.id;
+      if (!map[key]) {
+        map[key] = {
+          platform: o.platform || "DC",
+          handle: o.handle || "",
+          name: o.name || "",
+          phone: o.phone || "",
+          count: 0,
+          cardFee: 0,
+          blueBindFee: 0,
+          gachaFee: 0,
+          gachaDetails: [],
+          notes: [],
+          wonCards: [],
+          waitCards: []
+        };
+      }
+      const m = map[key];
+      if (o.platform) m.platform = o.platform;
+      if (o.handle) m.handle = o.handle;
+      if (o.name) m.name = o.name;
+      if (o.note && !m.notes.includes(o.note)) m.notes.push(o.note);
+
+      const gFee = Number(o.gachaFee) || 0;
+      m.gachaFee += gFee;
+      if (gFee > 0 && o.gachaText) m.gachaDetails.push(o.gachaText);
+
+      const entries = getOrderItemEntries(o, cardMap);
+      entries.forEach(({ card, qty }) => {
+        m.count += qty;
+        const winQty = pool.failed80 ? 0 : ((wonQtyByCardAndOrder[card.id] || {})[o.id] || 0);
+        const waitQty = Math.max(0, qty - winQty);
+        const p = Number(card.price) || 0;
+        const isBindCard = card.set === "綁物";
+        if (winQty > 0) {
+          if (isBindCard) {
+            m.blueBindFee += p * winQty;
+            m.wonCards.push(`【綁卡】${card.code} ${card.name}${winQty > 1 ? ` ×${winQty}` : ""} ($${p * winQty})`);
+          } else {
+            m.cardFee += p * winQty;
+            m.wonCards.push(`${card.code} ${card.name}${winQty > 1 ? ` ×${winQty}` : ""} ($${p * winQty})`);
+          }
+        }
+        if (waitQty > 0) {
+          m.waitCards.push(`${isBindCard ? "【綁卡】" : ""}${card.code} ${card.name}${waitQty > 1 ? ` ×${waitQty}` : ""}`);
+        }
+      });
+    });
+
+    return Object.values(map);
+  }
+
+  function renderBuyerSummary() {
+    const pool = getPool();
+    const list = computeBuyerStats(pool);
+    const tbody = document.getElementById("buyerSummaryBody");
+
+    if (!list.length) {
+      tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:var(--text-muted);">目前尚無有效喊單紀錄。</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = list.map(b => {
+      const total = b.cardFee + b.blueBindFee + b.gachaFee;
+      const needDeposit = total > 2000;
+      const phoneKey = normalizePhone(b.phone);
+      const st = getBuyerUnifiedStatus(pool, phoneKey);
+      const red = isRedBuyer(b, pool);
+      const buyerLabel = getBuyerDisplayLabel(b);
+      const noteLine = b.notes.length
+        ? `<div style="margin-top:3px;font-size:11.5px;color:#d81b60;">📝 ${escapeHtml(b.notes.join(" / "))}</div>`
+        : "";
+      const partialHint = st.partialShipped
+        ? `<div style="font-size:11px;color:#ef6c00;font-weight:700;">部分寄出（${st.shippedCount}/${st.totalOrders}單）</div>`
+        : "";
+
+      return `
+        <tr>
+          <td><span class="code-tag ${red ? "code-red" : "code-purple"}">${escapeHtml(buyerLabel)}${red ? "🔒" : ""}</span></td>
+          <td>${escapeHtml(b.platform)} / ${escapeHtml(b.handle || "-")}</td>
+          <td><b>${escapeHtml(b.name || "-")}</b><br>${escapeHtml(b.phone || "-")}${noteLine}</td>
+          <td>${b.count} 張</td>
+          <td>$${b.cardFee}</td>
+          <td>$${b.blueBindFee}</td>
+          <td>$${b.gachaFee}${b.gachaDetails.length ? `<br><span style="font-size:11px;color:var(--purple-deep);">${escapeHtml(b.gachaDetails.join("、"))}</span>` : ""}</td>
+          <td><b>$${total}</b></td>
+          <td>${needDeposit ? `<span class="deposit-box" style="padding:3px 8px;display:inline-block;">需付50%訂金 $${Math.ceil(total * 0.5)}</span>` : "免訂金"}</td>
+          <td>
+            <label class="check-pill"><input type="checkbox" ${st.paid ? "checked" : ""} onchange="toggleBuyerStatus('${escapeAttr(phoneKey)}','paid',this.checked)" /> 已對帳</label>
+            <label class="check-pill"><input type="checkbox" ${st.shipped ? "checked" : ""} onchange="toggleBuyerStatus('${escapeAttr(phoneKey)}','shipped',this.checked)" /> 已寄件</label>
+            ${partialHint}
+          </td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  // 自動寄件通知訊息：內容固定為「第幾盤的訂單已寄出」
+  function appendChatShippingNotice(pool, phoneKey) {
+    if (!phoneKey) return;
+    if (!pool.chats) pool.chats = {};
+    if (!pool.chats[phoneKey]) pool.chats[phoneKey] = [];
+    const roundTitle = getPoolRoundTitle(pool);
+    pool.chats[phoneKey].push({
+      id: "msg_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+      sender: "admin",
+      text: `${roundTitle}的訂單已寄出`,
+      time: new Date().toLocaleTimeString("zh-TW", { hour12: false }),
+      readByAdmin: true,
+      readByBuyer: false
+    });
+  }
+
+  // 買家總表與後台單筆訂單雙向同步連動
+  async function toggleBuyerStatus(phoneKey, field, val) {
+    const pool = getPool();
+    if (!pool.statusMap) pool.statusMap = {};
+    if (!pool.statusMap[phoneKey]) pool.statusMap[phoneKey] = { paid: false, shipped: false };
+    pool.statusMap[phoneKey][field] = Boolean(val);
+
+    let newlyShipped = false;
+    (pool.orders || []).forEach(o => {
+      if (!o.cancelled && normalizePhone(o.phone) === phoneKey) {
+        if (field === "shipped" && val && !o.shipped) newlyShipped = true;
+        o[field] = Boolean(val);
+      }
+    });
+
+    if (field === "shipped" && newlyShipped && phoneKey) {
+      appendChatShippingNotice(pool, phoneKey);
+    }
+
+    await saveAll(true);
+    renderBuyerSummary();
+    updateUnreadBadges();
+    if (isAdminAuthed) {
+      renderAdminOrders();
+      renderAdminDm();
+    }
+  }
+
+  async function toggleOrderStatusField(orderId, field, checked) {
+    const pool = getPool();
+    const target = (pool.orders || []).find(o => o.id === orderId);
+    if (!target) return;
+    const wasShipped = Boolean(target.shipped);
+    target[field] = Boolean(checked);
+
+    const phoneKey = normalizePhone(target.phone);
+    if (phoneKey) {
+      if (!pool.statusMap) pool.statusMap = {};
+      const unified = getBuyerUnifiedStatus(pool, phoneKey);
+      pool.statusMap[phoneKey] = {
+        paid: unified.paid,
+        shipped: unified.shipped
+      };
+      if (field === "shipped" && target.shipped && !wasShipped) {
+        appendChatShippingNotice(pool, phoneKey);
+      }
+    }
+
+    await saveAll(true);
+    renderAdminOrders();
+    renderBuyerSummary();
+    updateUnreadBadges();
+    renderAdminDm();
+  }
+
+  function openLookupModal() {
+    const currentPhone = document.getElementById("buyerPhoneInput").value;
+    if (currentPhone) document.getElementById("lookupPhoneInput").value = currentPhone;
+    runPhoneLookup();
+    document.getElementById("lookupModal").classList.add("open");
+  }
+
+  function runPhoneLookup() {
+    const pool = getPool();
+    const raw = document.getElementById("lookupPhoneInput").value;
+    const qPhone = normalizePhone(raw);
+    const box = document.getElementById("lookupResultBox");
+    if (!qPhone) {
+      box.innerHTML = `<span style="color:var(--text-muted);">請輸入電話號碼查詢。</span>`;
+      return;
+    }
+
+    const orders = (pool.orders || []).filter(o => !o.cancelled && normalizePhone(o.phone) === qPhone);
+    const cancelledOrders = (pool.orders || []).filter(o => o.cancelled && normalizePhone(o.phone) === qPhone);
+    const stats = computeBuyerStats(pool).find(b => normalizePhone(b.phone) === qPhone);
+
+    if (!orders.length && !cancelledOrders.length) {
+      box.innerHTML = `<span style="color:#c62828;">查無此電話在「${escapeHtml(pool.name)}」的排單紀錄。</span>`;
+      return;
+    }
+
+    const cardMap = Object.fromEntries((pool.cards || []).map(c => [c.id, c]));
+    const unifiedStatus = getBuyerUnifiedStatus(pool, qPhone);
+    const summaryHtml = stats ? (() => {
+      const total = stats.cardFee + stats.blueBindFee + stats.gachaFee;
+      return `
+        <div class="rule-pill" style="margin-bottom:10px;background:#fff4fa;">
+          <div><b>名字：</b>${escapeHtml(stats.name)}｜<b>電話：</b>${escapeHtml(stats.phone)}</div>
+          <div><b>帳務／寄件進度：</b>${unifiedStatus.paid ? "✅ 已對帳" : "⏳ 未對帳"}｜${unifiedStatus.shipped ? "📦 已全數寄出" : (unifiedStatus.partialShipped ? `📦 部分寄出（${unifiedStatus.shippedCount}/${unifiedStatus.totalOrders}單）` : "⏳ 尚未寄出")}</div>
+          <div><b>目前得標：</b>${stats.wonCards.length ? stats.wonCards.map(escapeHtml).join("、") : "尚無得標"}</div>
+          <div><b>候補中：</b>${stats.waitCards.length ? stats.waitCards.map(escapeHtml).join("、") : "無"}</div>
+          <div><b>目前得標金額試算：</b>卡片 $${stats.cardFee} ＋ 藍字綁物 $${stats.blueBindFee} ＋ 盲包加購 $${stats.gachaFee} ＝ <b style="color:var(--pink-deep);">$${total}</b></div>
+        </div>
+      `;
+    })() : "";
+
+    const orderListHtml = orders.length ? orders.map(o => {
+      const entries = getOrderItemEntries(o, cardMap);
+      const summary = formatCardSelectionSummary(entries);
+      const cardsText = summary.parts.map(escapeHtml).join("、");
+      const orderPaid = Boolean(o.paid);
+      const orderShipped = Boolean(o.shipped);
+      return `
+        <div class="rule-pill" style="margin-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <strong>單號 ${escapeHtml(o.timeStr || "")} ${orderShipped ? "（📦 已寄件）" : ""}</strong>
+            ${orderShipped
+              ? `<span style="font-size:12px;color:#c62828;font-weight:800;">已寄出不可自行撤回（請私訊老闆）</span>`
+              : `<button class="btn btn-danger btn-sm" onclick="buyerWithdrawOrder('${escapeAttr(o.id)}', ${orderPaid})">撤回此單</button>`
+            }
+          </div>
+          <div style="margin-top:4px;"><b>卡片：</b>${cardsText}</div>
+          <div><b>綁物：</b>${escapeHtml(o.bindText)}｜<b>加購：</b>${escapeHtml(o.gachaText)}</div>
+          ${o.note ? `<div><b>備註：</b>${escapeHtml(o.note)}</div>` : ""}
+        </div>
+      `;
+    }).join("") : `<div style="color:var(--text-muted);margin-bottom:8px;">目前無有效排單（全部訂單已撤回或取消）。</div>`;
+
+    const cancelledHtml = cancelledOrders.length ? `
+      <div style="font-weight:800;margin:10px 0 6px;color:var(--text-muted);">已撤回／已取消紀錄：</div>
+      ${cancelledOrders.map(o => {
+        const entries = getOrderItemEntries(o, cardMap);
+        const cardsText = formatCardSelectionSummary(entries).parts.map(escapeHtml).join("、");
+        return `
+          <div class="rule-pill" style="margin-bottom:6px;opacity:0.82;background:#fafafa;">
+            <div><span class="tag-cancel">已取消</span> ${escapeHtml(o.cancelledBy || "")}・${escapeHtml(o.cancelledAt || "")}</div>
+            <div style="margin-top:3px;"><b>原喊卡片：</b>${cardsText}</div>
+            ${o.cancelReason ? `<div><b>原因：</b>${escapeHtml(o.cancelReason)}</div>` : ""}
+          </div>
+        `;
+      }).join("")}
+    ` : "";
+
+    box.innerHTML = summaryHtml + `<div style="font-weight:800;margin-bottom:6px;color:var(--purple-deep);">我的有效訂單明細：</div>` + orderListHtml + cancelledHtml;
+  }
+
+  // 完善的撤回訂單流程：已寄出不可撤回、可填寫撤回原因、若已對帳自動傳系統通知進聊天室提醒老闆
+  async function buyerWithdrawOrder(orderId, isPaid = false) {
+    const pool = getPool();
+    const target = (pool.orders || []).find(o => o.id === orderId && !o.cancelled);
+    if (!target) return;
+
+    if (target.shipped) {
+      alert("此筆訂單已標記「已寄件」，無法自行撤回，請直接私訊老闆處理！");
+      return;
+    }
+
+    const paidWarn = isPaid ? "\n⚠️ 注意：系統顯示此單「已對帳」，撤回後系統會自動在聊天室通知老闆處理帳務／訂金！" : "";
+    const ok = confirm(`確定要撤回這筆排單嗎？撤回後名額會立刻釋放並重算順位。${paidWarn}`);
+    if (!ok) return;
+
+    const reasonInput = prompt("請輸入撤回原因（選填，直接按確定可略過）：", "");
+    if (reasonInput === null) return;
+    const reason = reasonInput.trim();
+
+    const cardMap = Object.fromEntries((pool.cards || []).map(c => [c.id, c]));
+    const cardsSummary = formatCardSelectionSummary(getOrderItemEntries(target, cardMap)).parts.join("、");
+
+    target.cancelled = true;
+    target.cancelledAt = new Date().toLocaleString("zh-TW", { hour12: false });
+    target.cancelledBy = "買家自行撤回";
+    target.cancelReason = reason;
+    target.paidWhenCancelled = Boolean(isPaid);
+
+    const phoneKey = normalizePhone(target.phone);
+    if (phoneKey) {
+      // 重算該買家剩餘有效訂單的對帳／寄件狀態
+      const unified = getBuyerUnifiedStatus(pool, phoneKey);
+      if (!pool.statusMap) pool.statusMap = {};
+      pool.statusMap[phoneKey] = { paid: unified.paid, shipped: unified.shipped };
+
+      // 若已對帳或有填寫撤回原因，自動發一則系統提醒給老闆聊天室
+      if (isPaid || reason) {
+        if (!pool.chats) pool.chats = {};
+        if (!pool.chats[phoneKey]) pool.chats[phoneKey] = [];
+        const noticeParts = [
+          `⚠️ 撤單通知：買家已自行撤回「${getPoolRoundTitle(pool)}」訂單（${cardsSummary}）`
+        ];
+        if (isPaid) noticeParts.push("【此單曾標記已對帳，請確認退款／訂金】");
+        if (reason) noticeParts.push(`原因：${reason}`);
+        pool.chats[phoneKey].push({
+          id: "msg_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+          sender: "buyer",
+          senderName: target.name || "買家",
+          text: noticeParts.join(" "),
+          time: new Date().toLocaleTimeString("zh-TW", { hour12: false }),
+          readByAdmin: false,
+          readByBuyer: true
+        });
+      }
+    }
+
+    await saveAll(true);
+    renderAll();
+    runPhoneLookup();
+    alert("已撤回此筆訂單，排單順位與剩餘數量已更新。");
+  }
+
+  function openAdminLogin() {
+    if (isAdminAuthed) {
+      switchMode("admin");
+      return;
+    }
+    document.getElementById("adminPassInput").value = "";
+    document.getElementById("adminLoginHint").textContent = "";
+    document.getElementById("adminLoginModal").classList.add("open");
+    setTimeout(() => document.getElementById("adminPassInput").focus(), 50);
+  }
+
+  function verifyAdminLogin() {
+    if (adminFailCount >= 5) {
+      document.getElementById("adminLoginHint").textContent = "嘗試次數過多，請重新整理頁面後再試。";
+      return;
+    }
+    const val = document.getElementById("adminPassInput").value;
+    if (val === ADMIN_PASS) {
+      adminFailCount = 0;
+      isAdminAuthed = true;
+      document.getElementById("tabAdmin").style.display = "inline-block";
+      closeModal("adminLoginModal");
+      switchMode("admin");
+    } else {
+      adminFailCount++;
+      document.getElementById("adminLoginHint").textContent = `密碼錯誤（已錯誤 ${adminFailCount}/5 次）`;
+    }
+  }
+
+  function logoutAdmin() {
+    isAdminAuthed = false;
+    document.getElementById("tabAdmin").style.display = "none";
+    switchMode("buyer");
+  }
+
+  async function cancelCustomerOrder(orderId) {
+    const pool = getPool();
+    const target = (pool.orders || []).find(o => o.id === orderId && !o.cancelled);
+    if (!target) {
+      alert("找不到這筆有效訂單，可能已被取消或撤回。");
+      return;
+    }
+
+    const cardMap = Object.fromEntries((pool.cards || []).map(c => [c.id, c]));
+    const summary = formatCardSelectionSummary(getOrderItemEntries(target, cardMap));
+    const statusFlags = [
+      target.paid ? "✅ 已對帳" : "⏳ 未對帳",
+      target.shipped ? "📦 已寄件" : "⏳ 未寄件"
+    ].join("｜");
+
+    const ok = confirm(
+      `【確認單筆取消訂單】\n` +
+      `・客人：${target.name || "未填名"}（${target.platform || "DC"}：${target.handle || "-"}）\n` +
+      `・電話：${target.phone || "未填"}\n` +
+      `・下單時間：${target.timeStr || "-"}\n` +
+      `・目前狀態：${statusFlags}\n` +
+      `・釋放卡片：${summary.parts.length ? summary.parts.join("、") : "無"}\n` +
+      `・綁物／加購：${target.bindText || "無需自選綁物"} / ${target.gachaText || "無加購"}\n\n` +
+      `確認後只會取消「這一筆」訂單，不會影響該客人其他訂單或其他客人；名額與順位會立即重算。`
+    );
+    if (!ok) return;
+
+    const reasonInput = prompt("請輸入取消原因（選填，直接按確定略過）：", "");
+    if (reasonInput === null) return;
+
+    target.cancelled = true;
+    target.cancelledAt = new Date().toLocaleString("zh-TW", { hour12: false });
+    target.cancelledBy = "老闆後台取消";
+    target.cancelReason = reasonInput.trim();
+
+    const phoneKey = normalizePhone(target.phone);
+    if (phoneKey) {
+      const unified = getBuyerUnifiedStatus(pool, phoneKey);
+      if (!pool.statusMap) pool.statusMap = {};
+      pool.statusMap[phoneKey] = { paid: unified.paid, shipped: unified.shipped };
+
+      const cardsSummary = summary.parts.length ? summary.parts.join("、") : "卡片明細";
+      if (!pool.chats) pool.chats = {};
+      if (!pool.chats[phoneKey]) pool.chats[phoneKey] = [];
+      const noticeParts = [
+        `⚠️ 訂單取消通知：老闆已取消你在「${getPoolRoundTitle(pool)}」的訂單（${cardsSummary}）`
+      ];
+      if (target.paid) noticeParts.push("【此單曾標記已對帳，請留意退款／訂金處理】");
+      if (target.cancelReason) noticeParts.push(`原因：${target.cancelReason}`);
+      pool.chats[phoneKey].push({
+        id: "msg_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+        sender: "admin",
+        text: noticeParts.join(" "),
+        time: new Date().toLocaleTimeString("zh-TW", { hour12: false }),
+        readByAdmin: true,
+        readByBuyer: false
+      });
+    }
+
+    await saveAll(true);
+    renderAll();
+    alert(`已取消「${target.name || target.phone}」的訂單，卡片剩餘數量與順位已更新。`);
+  }
+
+
+  async function cancelAllOrdersByPhone(phoneRaw, buyerName = "") {
+    const pool = getPool();
+    const phoneKey = normalizePhone(phoneRaw);
+    const matching = (pool.orders || []).filter(o => !o.cancelled && (
+      phoneKey ? normalizePhone(o.phone) === phoneKey : (o.name || "") === buyerName
+    ));
+    if (!matching.length) {
+      alert("這位客人目前沒有可取消的有效訂單。");
+      return;
+    }
+
+    const cardMap = Object.fromEntries((pool.cards || []).map(c => [c.id, c]));
+    const allCardNames = matching.flatMap(o => formatCardSelectionSummary(getOrderItemEntries(o, cardMap)).parts);
+    const anyPaid = matching.some(o => Boolean(o.paid));
+    const anyShipped = matching.some(o => Boolean(o.shipped));
+
+    const ok = confirm(
+      `【確認取消該客人全部有效訂單（共 ${matching.length} 筆）】\n` +
+      `・客人：${buyerName || matching[0].name || "未填名"}（${phoneKey || matching[0].phone || "無電話"}）\n` +
+      `・包含狀態：${anyPaid ? "⚠️ 含已對帳訂單 " : ""}${anyShipped ? "⚠️ 含已寄件訂單" : ""}${!anyPaid && !anyShipped ? "未對帳／未寄件" : ""}\n` +
+      `・涉及卡片：${allCardNames.length ? allCardNames.join("、") : "無"}\n\n` +
+      `確定要一次取消這位客人的全部 ${matching.length} 筆有效訂單嗎？`
+    );
+    if (!ok) return;
+
+    const reasonInput = prompt("請輸入批次取消原因（選填，直接按確定略過）：", "");
+    if (reasonInput === null) return;
+    const reason = reasonInput.trim();
+    const nowStr = new Date().toLocaleString("zh-TW", { hour12: false });
+
+    matching.forEach(target => {
+      target.cancelled = true;
+      target.cancelledAt = nowStr;
+      target.cancelledBy = "老闆後台批次取消";
+      target.cancelReason = reason;
+    });
+
+    if (phoneKey) {
+      const unified = getBuyerUnifiedStatus(pool, phoneKey);
+      if (!pool.statusMap) pool.statusMap = {};
+      pool.statusMap[phoneKey] = { paid: unified.paid, shipped: unified.shipped };
+
+      if (!pool.chats) pool.chats = {};
+      if (!pool.chats[phoneKey]) pool.chats[phoneKey] = [];
+      const cardsSummary = allCardNames.length ? allCardNames.join("、") : "卡片明細";
+      const noticeParts = [
+        `⚠️ 訂單取消通知：老闆已取消你在「${getPoolRoundTitle(pool)}」的全部 ${matching.length} 筆有效訂單（${cardsSummary}）`
+      ];
+      if (anyPaid) noticeParts.push("【其中包含曾標記已對帳之訂單，請留意退款／訂金處理】");
+      if (reason) noticeParts.push(`原因：${reason}`);
+      pool.chats[phoneKey].push({
+        id: "msg_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+        sender: "admin",
+        text: noticeParts.join(" "),
+        time: new Date().toLocaleTimeString("zh-TW", { hour12: false }),
+        readByAdmin: true,
+        readByBuyer: false
+      });
+    }
+
+    await saveAll(true);
+    renderAll();
+    alert(`已取消「${buyerName || phoneKey}」共 ${matching.length} 筆有效訂單。`);
+  }
+
+  function renderAdminFinalWinners() {
+    const pool = getPool();
+    const list = computeBuyerStats(pool);
+    const tbody = document.getElementById("adminFinalWinnersBody");
+
+    if (!list.length) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);">目前尚無得標分貨紀錄。</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = list.map(b => {
+      const total = b.cardFee + b.blueBindFee + b.gachaFee;
+      const wonChips = b.wonCards.length
+        ? b.wonCards.map(w => `<span class="won-card-chip">${escapeHtml(w)}</span>`).join("")
+        : `<span style="color:var(--text-muted);">無</span>`;
+      const waitChips = b.waitCards.length
+        ? b.waitCards.map(w => `<span class="won-card-chip" style="background:#f3e5f5;border-color:#ce93d8;">${escapeHtml(w)}</span>`).join("")
+        : `<span style="color:var(--text-muted);">無</span>`;
+
+      return `
+        <tr>
+          <td><b>${escapeHtml(b.name || "-")}</b><br>${escapeHtml(b.phone || "-")}</td>
+          <td>${escapeHtml(b.platform)} ${escapeHtml(b.handle || "-")}</td>
+          <td>${wonChips}（<b>${b.wonCards.length}</b> 項）</td>
+          <td>${waitChips}</td>
+          <td>
+            <b>$${total}</b><br>
+            <span style="font-size:11.5px;color:var(--text-muted);">卡片$${b.cardFee}＋綁物$${b.blueBindFee}＋盲包加購$${b.gachaFee}</span>
+            ${total > 2000 ? `<br><span style="color:#d81b60;font-size:11.5px;font-weight:800;">訂金50%：$${Math.ceil(total * 0.5)}</span>` : ""}
+          </td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function renderAdminFailed80Badge() {
+    const pool = getPool();
+    const badgeEl = document.getElementById("adminFailed80Badge");
+    if (!badgeEl) return;
+    badgeEl.innerHTML = pool.failed80 ? ' <span class="tag-cancel">全盤流盤・不成立</span>' : "";
+  }
+
+  function copyFinalWinnersSummary() {
+    const pool = getPool();
+    const list = computeBuyerStats(pool);
+    if (!list.length) return alert("目前沒有得標紀錄可複製。");
+    const txt = [`【${pool.name} 最終得標與盲包加購分貨表】`, ...list.map(b => {
+      const total = b.cardFee + b.blueBindFee + b.gachaFee;
+      return `• ${b.name}（${b.phone}）：得標 ${b.wonCards.join("、") || "無"}｜盲包加購 $${b.gachaFee}｜合計 $${total}`;
+    })].join("\n");
+    copyTextSafe(txt, "已複製最終得標分貨表！");
+  }
+
+  function toggleAdminCardsCollapse() {
+    const body = document.getElementById("adminCardsCollapseBody");
+    const btn = document.getElementById("toggleAdminCardsBtn");
+    if (!body || !btn) return;
+    const isHidden = body.style.display === "none";
+    body.style.display = isHidden ? "block" : "none";
+    btn.textContent = isHidden ? "🔼 收合卡表" : "🔽 展開卡表";
+  }
+
+  function toggleAdminOrdersCollapse() {
+    const body = document.getElementById("adminOrdersCollapseBody");
+    const btn = document.getElementById("toggleAdminOrdersBtn");
+    if (!body || !btn) return;
+    const isHidden = body.style.display === "none";
+    body.style.display = isHidden ? "block" : "none";
+    btn.textContent = isHidden ? "🔼 收合喊單" : "🔽 展開喊單";
+  }
+
+  function renderAdminCards() {
+    const pool = getPool();
+    const countTag = document.getElementById("adminCardsCountTag");
+    if (countTag) countTag.textContent = `（共 ${(pool.cards || []).length} 款）`;
+    const tbody = document.getElementById("adminCardTableBody");
+    tbody.innerHTML = (pool.cards || []).map(c => `
+      <tr>
+        <td><b>${escapeHtml(c.set || "")}</b><br>${escapeHtml(c.code || "")}</td>
+        <td><input type="text" class="name-edit-input" value="${escapeAttr(c.name || "")}" onchange="updateCardField('${escapeAttr(c.id)}','name',this.value)" /></td>
+        <td><input type="number" class="num-input" min="0" step="10" value="${Number(c.price) || 0}" onchange="updateCardField('${escapeAttr(c.id)}','price',Math.max(0, Math.round(Number(this.value) || 0)))" /></td>
+        <td><input type="number" class="num-input" min="0" step="1" value="${Number(c.bind) || 0}" onchange="updateCardField('${escapeAttr(c.id)}','bind',Math.max(0, Math.round(Number(this.value) || 0)))" /></td>
+        <td><input type="checkbox" ${c.star ? "checked" : ""} onchange="updateCardField('${escapeAttr(c.id)}','star',this.checked)" /></td>
+        <td><input type="number" class="num-input" min="0" value="${Math.max(0, Number(c.qty) || 0)}" onchange="updateCardField('${escapeAttr(c.id)}','qty',Math.max(0, Math.round(Number(this.value) || 0)))" /></td>
+        <td><button class="btn btn-danger btn-sm" onclick="deleteCardItem('${escapeAttr(c.id)}')">刪除</button></td>
+      </tr>
+    `).join("");
+  }
+
+  async function updateCardField(cardId, field, val) {
+    const pool = getPool();
+    const c = (pool.cards || []).find(x => x.id === cardId);
+    if (!c) return;
+    c[field] = val;
+    await saveAll(true);
+    renderAll();
+  }
+
+  async function deleteCardItem(cardId) {
+    const pool = getPool();
+    if (!confirm("確定要刪除這張卡片嗎？")) return;
+    pool.cards = (pool.cards || []).filter(x => x.id !== cardId);
+    selectedCardQtyMap.delete(cardId);
+    await saveAll(true);
+    renderAll();
+  }
+
+  function renderAdminOrders() {
+    const pool = getPool();
+    const { activeOrders, cardMap } = computePoolQueuesAndWinners(pool);
+    const tbody = document.getElementById("adminOrdersTableBody");
+
+    const onlyUnpaid = Boolean(document.getElementById("adminOnlyUnpaidFilter")?.checked);
+    const onlyUnshipped = Boolean(document.getElementById("adminOnlyUnshippedFilter")?.checked);
+    const orderKw = (document.getElementById("adminOrderSearchInput")?.value || "").trim().toLowerCase();
+
+    const filteredOrders = activeOrders.filter(o => {
+      if (onlyUnpaid && o.paid) return false;
+      if (onlyUnshipped && o.shipped) return false;
+      if (orderKw) {
+        const entries = getOrderItemEntries(o, cardMap);
+        const cardText = entries.map(e => `${e.card.code || ""} ${e.card.name || ""}`).join(" ");
+        const hay = `${o.name || ""} ${o.phone || ""} ${o.handle || ""} ${o.note || ""} ${cardText}`.toLowerCase();
+        if (!hay.includes(orderKw)) return false;
+      }
+      return true;
+    });
+
+    if (!filteredOrders.length) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-muted);">沒有符合條件的喊單紀錄。</td></tr>`;
+    } else {
+      tbody.innerHTML = filteredOrders.map(o => {
+        const entries = getOrderItemEntries(o, cardMap);
+        const summary = formatCardSelectionSummary(entries);
+        const itemsText = summary.parts.length
+          ? summary.parts.map(escapeHtml).join("、")
+          : "已移除卡片";
+        const red = isRedBuyer(o, pool);
+        const buyerLabel = getBuyerDisplayLabel(o);
+        const noteHtml = o.note
+          ? `<div style="margin-top:4px;color:#d81b60;font-weight:700;">📝 備註：${escapeHtml(o.note)}</div>`
+          : "";
+
+        return `
+          <tr>
+            <td><span class="code-tag ${red ? "code-red" : "code-purple"}">${escapeHtml(buyerLabel)}${red ? "🔒" : ""}</span></td>
+            <td>${escapeHtml(o.platform || "DC")} / ${escapeHtml(o.handle || "-")}</td>
+            <td><b>${escapeHtml(o.name || "-")}</b><br>${escapeHtml(o.phone || "-")}</td>
+            <td>${itemsText}${noteHtml}</td>
+            <td>綁物：${escapeHtml(o.bindText || "無需自選綁物")}<br>加購：${escapeHtml(o.gachaText || "無加購")}</td>
+            <td>${escapeHtml(o.timeStr || "")}</td>
+            <td>
+              <div style="margin-bottom:4px;">
+                <span class="${o.paid ? "tag-win" : "tag-wait"}">${o.paid ? "此單已對帳" : "此單未對帳"}</span>
+                <span class="${o.shipped ? "tag-win" : "tag-wait"}">${o.shipped ? "此單已寄件" : "此單未寄件"}</span>
+              </div>
+              <label class="check-pill" style="margin-bottom:4px;display:inline-flex;">
+                <input type="checkbox" ${o.paid ? "checked" : ""} onchange="toggleOrderStatusField('${escapeAttr(o.id)}', 'paid', this.checked)" />
+                已對帳
+              </label>
+              <label class="check-pill" style="margin-bottom:6px;display:inline-flex;">
+                <input type="checkbox" ${o.shipped ? "checked" : ""} onchange="toggleOrderStatusField('${escapeAttr(o.id)}', 'shipped', this.checked)" />
+                已寄件
+              </label><br>
+              <button class="btn btn-danger btn-sm" onclick="cancelCustomerOrder('${escapeAttr(o.id)}')">取消此單</button>
+              ${(() => {
+                const pKey = normalizePhone(o.phone);
+                const sameCount = activeOrders.filter(x => normalizePhone(x.phone) === pKey).length;
+                if (sameCount > 1) {
+                  return `<button class="btn btn-soft btn-sm" style="color:#c62828;border-color:#ffcdd2;margin-top:4px;" onclick="cancelAllOrdersByPhone('${escapeAttr(o.phone || "")}', '${escapeAttr(o.name || "")}')">取消該客全部(${sameCount}單)</button>`;
+                }
+                return "";
+              })()}
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    const cancelledList = (pool.orders || []).filter(o => o.cancelled);
+    const cancelBody = document.getElementById("adminCancelledOrdersBody");
+    if (!cancelBody) return;
+    if (!cancelledList.length) {
+      cancelBody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);">尚無已撤回或已取消的訂單紀錄。</td></tr>`;
+    } else {
+      cancelBody.innerHTML = cancelledList.map(o => {
+        const entries = getOrderItemEntries(o, cardMap);
+        const summary = formatCardSelectionSummary(entries);
+        const itemsText = summary.parts.length
+          ? summary.parts.map(escapeHtml).join("、")
+          : "卡片明細";
+        const paidNote = o.paidWhenCancelled ? `<span style="color:#c62828;font-weight:800;">【原單已對帳】</span>` : "";
+        return `
+          <tr style="opacity:0.88;">
+            <td><span class="tag-cancel">已取消</span></td>
+            <td><b>${escapeHtml(o.name || "-")}</b>（${escapeHtml(o.phone || "-")}）</td>
+            <td>${itemsText}</td>
+            <td>${escapeHtml(o.cancelledBy || "已取消")}・${escapeHtml(o.cancelledAt || o.timeStr || "")}</td>
+            <td>${paidNote}${escapeHtml(o.cancelReason || "-")}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+  }
+
+  async function applyBulkFixedPrice() {
+    const pool = getPool();
+    const target = document.getElementById("bulkTargetSet").value;
+    const onlyZero = document.getElementById("bulkOnlyZeroPrice").checked;
+    const rawVal = Number(document.getElementById("bulkFixedPrice").value);
+    if (isNaN(rawVal) || rawVal < 0) return alert("請輸入有效金額！");
+    const val = Math.round(rawVal);
+
+    let changed = 0;
+    (pool.cards || []).forEach(c => {
+      if (target === "ALL" || c.set === target) {
+        if (!onlyZero || (Number(c.price) || 0) === 0) {
+          c.price = val;
+          changed++;
+        }
+      }
+    });
+    await saveAll(true);
+    renderAll();
+    alert(`已更新 ${changed} 張卡片單價為 $${val}。`);
+  }
+
+  async function applyBulkPriceDelta() {
+    const pool = getPool();
+    const target = document.getElementById("bulkTargetSet").value;
+    const onlyZero = document.getElementById("bulkOnlyZeroPrice").checked;
+    const rawDelta = Number(document.getElementById("bulkDeltaPrice").value);
+    if (isNaN(rawDelta)) return alert("請輸入加減金額！");
+    const delta = Math.round(rawDelta);
+
+    let changed = 0;
+    (pool.cards || []).forEach(c => {
+      if (target === "ALL" || c.set === target) {
+        const cur = Number(c.price) || 0;
+        if (!onlyZero || cur === 0) {
+          c.price = Math.max(0, cur + delta);
+          changed++;
+        }
+      }
+    });
+    await saveAll(true);
+    renderAll();
+    alert(`已調整 ${changed} 張卡片單價（${delta >= 0 ? "+" : ""}${delta}）。`);
+  }
+
+  function getAvailableSetsForPool(pool) {
+    const baseSets = SETS.filter(s => s !== "全部");
+    const extraSets = ((pool && pool.cards) || []).map(c => c.set).filter(s => s && !baseSets.includes(s));
+    return [...baseSets, ...Array.from(new Set(extraSets))];
+  }
+
+  function buildDefaultCardsForSet(setName) {
+    const rows = RAW_CARD_SHEETS[setName] || [];
+    return rows.map(([code, name], idx) => ({
+      id: `c_${setName}_${idx}_${code}_${Math.random().toString(36).slice(2, 6)}`,
+      set: setName,
+      code,
+      name,
+      price: 0,
+      bind: 0,
+      star: false,
+      qty: 1
+    }));
+  }
+
+  function renderNewPoolSetsCheckboxes() {
+    const pool = getPool();
+    const sets = getAvailableSetsForPool(pool);
+    const box = document.getElementById("newPoolSetsList");
+    if (!box) return;
+    box.innerHTML = sets.map(s => {
+      const countInCurrent = (pool.cards || []).filter(c => c.set === s).length;
+      const defaultCount = (RAW_CARD_SHEETS[s] || []).length;
+      const showCount = countInCurrent > 0 ? countInCurrent : defaultCount;
+      return `
+        <label class="check-pill" style="margin:0;">
+          <input type="checkbox" class="new-pool-set-cb" value="${escapeAttr(s)}" checked />
+          <span>${escapeHtml(s)}（${showCount}張）</span>
+        </label>
+      `;
+    }).join("");
+  }
+
+  function toggleAllNewPoolSets(checked) {
+    document.querySelectorAll(".new-pool-set-cb").forEach(cb => {
+      cb.checked = Boolean(checked);
+    });
+  }
+
+  function openNewPoolModal() {
+    document.getElementById("newPoolNameInput").value = "";
+    renderNewPoolSetsCheckboxes();
+    document.getElementById("newPoolModal").classList.add("open");
+    setTimeout(() => document.getElementById("newPoolNameInput").focus(), 50);
+  }
+
+  function getMasterEntry(setName, code) {
+    if (!db.masterPriceBook) db.masterPriceBook = buildDefaultMasterPriceBook(db.pools);
+    const exact = db.masterPriceBook[`${setName || ""}::${code || ""}`];
+    if (exact) return exact;
+    return Object.values(db.masterPriceBook).find(item => item.code === code) || null;
+  }
+
+  function resolveCardForNewPool(baseCard, currentCard, priceSource) {
+    const master = getMasterEntry(baseCard.set, baseCard.code);
+    if (priceSource === "zero") {
+      return {
+        ...baseCard,
+        price: 0,
+        bind: 0,
+        star: false,
+        qty: Math.max(1, Number(baseCard.qty) || 1)
+      };
+    }
+    if (priceSource === "current" && currentCard) {
+      return {
+        ...baseCard,
+        name: currentCard.name || baseCard.name,
+        price: Number(currentCard.price) || 0,
+        bind: Number(currentCard.bind) || 0,
+        star: Boolean(currentCard.star),
+        qty: Math.max(1, Number(currentCard.qty) || 1)
+      };
+    }
+    // 預設 "master"：優先沿用全圖鑑買賣價格基準表
+    if (master) {
+      const hasMasterPrice = (Number(master.price) || 0) > 0 || (Number(master.bind) || 0) > 0 || Boolean(master.star);
+      if (hasMasterPrice || !currentCard) {
+        return {
+          ...baseCard,
+          name: master.name || (currentCard && currentCard.name) || baseCard.name,
+          price: Number(master.price) || 0,
+          bind: Number(master.bind) || 0,
+          star: Boolean(master.star),
+          qty: Math.max(1, Number(master.qty) || (currentCard && Number(currentCard.qty)) || 1)
+        };
+      }
+    }
+    if (currentCard) {
+      return {
+        ...baseCard,
+        name: currentCard.name || baseCard.name,
+        price: Number(currentCard.price) || 0,
+        bind: Number(currentCard.bind) || 0,
+        star: Boolean(currentCard.star),
+        qty: Math.max(1, Number(currentCard.qty) || 1)
+      };
+    }
+    return { ...baseCard };
+  }
+
+  async function createNewPool() {
+    const name = document.getElementById("newPoolNameInput").value.trim();
+    if (!name) return alert("請輸入新盤面名稱！");
+    const current = getPool();
+    const selectedSets = Array.from(document.querySelectorAll(".new-pool-set-cb:checked")).map(cb => cb.value);
+    const copySettings = document.getElementById("copyNewPoolSettings").checked;
+    const priceSource = (document.getElementById("newPoolPriceSource") && document.getElementById("newPoolPriceSource").value) || "master";
+
+    const newPool = createDefaultPool("pool_" + Date.now(), name);
+    newPool.cards = [];
+    newPool.setBanners = {};
+
+    selectedSets.forEach(setName => {
+      const fromCurrent = (current.cards || []).filter(c => c.set === setName);
+      const defaults = buildDefaultCardsForSet(setName);
+      const templateCards = fromCurrent.length > 0 ? fromCurrent : defaults;
+      const currentByCode = Object.fromEntries(fromCurrent.map(c => [c.code, c]));
+
+      templateCards.forEach(c => {
+        const freshBase = {
+          ...c,
+          id: `c_${setName}_${c.code}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`
+        };
+        newPool.cards.push(resolveCardForNewPool(freshBase, currentByCode[c.code] || c, priceSource));
+      });
+
+      if (current.setBanners && current.setBanners[setName]) {
+        newPool.setBanners[setName] = current.setBanners[setName];
+      }
+    });
+
+    if (copySettings) {
+      newPool.redCodes = [...(current.redCodes || [])];
+      newPool.contact = { ...(current.contact || {}) };
+    }
+
+    db.pools.push(newPool);
+    db.activePoolId = newPool.id;
+    currentSetFilter = "全部";
+    selectedCardQtyMap.clear();
+    closeModal("newPoolModal");
+    await saveAll(true);
+    renderAll();
+  }
+
+  let currentMasterSetFilter = "全部";
+
+  function setMasterFilter(s) {
+    currentMasterSetFilter = s;
+    renderMasterPriceBoard();
+  }
+
+  function renderMasterSetChips() {
+    const box = document.getElementById("masterSetChips");
+    if (!box) return;
+    const pool = getPool();
+    const sets = ["全部", ...getAvailableSetsForPool(pool)];
+    if (!sets.includes(currentMasterSetFilter)) currentMasterSetFilter = "全部";
+    box.innerHTML = sets.map(s => `
+      <button type="button" class="filter-chip ${currentMasterSetFilter === s ? "active" : ""}" onclick="setMasterFilter('${escapeAttr(s)}')">${escapeHtml(s)}</button>
+    `).join("");
+  }
+
+  function renderMasterBanner() {
+    const pool = getPool();
+    const box = document.getElementById("masterBannerBox");
+    if (!box) return;
+    const imgUrl = currentMasterSetFilter !== "全部" ? (pool.setBanners || {})[currentMasterSetFilter] : "";
+    if (!imgUrl) {
+      box.innerHTML = "";
+      return;
+    }
+    box.innerHTML = `
+      <div class="set-banner" style="margin-bottom:10px;">
+        <div style="font-weight:800;font-size:13px;color:var(--purple-deep);">🖼️ ${escapeHtml(currentMasterSetFilter)} 整彈大圖對照</div>
+        <img src="${escapeAttr(imgUrl)}" alt="${escapeAttr(currentMasterSetFilter)}" style="max-height:300px;" />
+      </div>
+    `;
+  }
+
+  function renderMasterPriceBoard() {
+    renderMasterSetChips();
+    renderMasterBanner();
+    if (!db.masterPriceBook) db.masterPriceBook = buildDefaultMasterPriceBook(db.pools);
+    const grid = document.getElementById("masterCardGrid");
+    if (!grid) return;
+
+    const onlyStar = Boolean(document.getElementById("masterOnlyStarFilter")?.checked);
+    const onlyPriced = Boolean(document.getElementById("masterOnlyPricedFilter")?.checked);
+    const kw = (document.getElementById("masterSearchInput")?.value || "").trim().toLowerCase();
+
+    const entries = Object.entries(db.masterPriceBook).filter(([_, item]) => {
+      if (!item) return false;
+      if (currentMasterSetFilter !== "全部" && item.set !== currentMasterSetFilter) return false;
+      if (onlyStar && !item.star) return false;
+      if (onlyPriced && (Number(item.price) || 0) <= 0 && (Number(item.bind) || 0) <= 0) return false;
+      if (kw) {
+        const hay = `${item.set || ""} ${item.code || ""} ${item.name || ""}`.toLowerCase();
+        if (!hay.includes(kw)) return false;
+      }
+      return true;
+    });
+
+    if (!entries.length) {
+      grid.innerHTML = `<div class="box-card" style="grid-column:1/-1;text-align:center;">沒有符合篩選條件的基準卡片。</div>`;
+      return;
+    }
+
+    grid.innerHTML = entries.map(([key, item]) => {
+      const price = Number(item.price) || 0;
+      const bind = Number(item.bind) || 0;
+      const qty = Math.max(1, Number(item.qty) || 1);
+      const hasPrice = price > 0 || bind > 0;
+      return `
+        <div class="idol-card ${hasPrice ? "has-queue" : ""}" onclick="openMasterCardEditModal('${escapeAttr(key)}')" title="點擊編輯這張基準卡">
+          ${item.star ? `<span class="star-badge">⭐️ 熱貴</span>` : ""}
+          <span class="qty-badge">預設 ${qty} 張</span>
+          <div class="card-thumb">
+            <span class="card-code">${escapeHtml(item.set || "")}・${escapeHtml(item.code || "")}</span>
+            <div class="card-name">${escapeHtml(item.name || "")}</div>
+            <span class="same-demand-pill" style="background:${hasPrice ? "#e8f5e9" : "#f3e5f5"};color:${hasPrice ? "#2e7d32" : "#7b1fa2"};">
+              ${hasPrice ? "已設基準價・點擊修改" : "尚未設價・點擊設定"}
+            </span>
+          </div>
+          <div class="price-row" onclick="event.stopPropagation()">
+            <label style="font-size:12px;font-weight:900;color:var(--pink-deep);display:inline-flex;align-items:center;gap:2px;">
+              🌙$<input type="number" min="0" step="10" value="${price}" style="width:58px;padding:2px 4px;border-radius:7px;border:1.5px solid #f4b8d1;font-weight:800;color:var(--pink-deep);text-align:center;" onchange="updateMasterCardField('${escapeAttr(key)}','price',Math.max(0, Math.round(Number(this.value) || 0)))" />
+            </label>
+            <label style="font-size:11.5px;font-weight:800;color:var(--blue-bind);display:inline-flex;align-items:center;gap:2px;">
+              💙綁<input type="number" min="0" step="1" value="${bind}" style="width:46px;padding:2px 4px;border-radius:7px;border:1.5px solid #bbdefb;font-weight:800;color:var(--blue-bind);text-align:center;" onchange="updateMasterCardField('${escapeAttr(key)}','bind',Math.max(0, Math.round(Number(this.value) || 0)))" />張
+            </label>
+          </div>
+          <div class="queue-codes" style="justify-content:space-between;" onclick="event.stopPropagation()">
+            <label style="font-size:11px;font-weight:800;color:var(--text-muted);cursor:pointer;display:inline-flex;align-items:center;gap:3px;">
+              <input type="checkbox" ${item.star ? "checked" : ""} onchange="updateMasterCardField('${escapeAttr(key)}','star',this.checked)" /> 熱卡⭐️
+            </label>
+            <button type="button" class="btn btn-soft btn-sm" style="padding:2px 7px;font-size:11px;" onclick="openMasterCardEditModal('${escapeAttr(key)}')">✏️ 詳細</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function openMasterCardEditModal(key) {
+    if (!db.masterPriceBook || !db.masterPriceBook[key]) return;
+    const item = db.masterPriceBook[key];
+    document.getElementById("masterEditKeyInput").value = key;
+    document.getElementById("masterEditCardHeader").textContent = `${item.set || ""}・${item.code || ""}`;
+    document.getElementById("masterEditNameInput").value = item.name || "";
+    document.getElementById("masterEditPriceInput").value = Number(item.price) || 0;
+    document.getElementById("masterEditBindInput").value = Number(item.bind) || 0;
+    document.getElementById("masterEditQtyInput").value = Math.max(1, Number(item.qty) || 1);
+    document.getElementById("masterEditStarInput").checked = Boolean(item.star);
+    document.getElementById("masterCardEditModal").classList.add("open");
+  }
+
+  async function saveMasterCardModal() {
+    const key = document.getElementById("masterEditKeyInput").value;
+    if (!db.masterPriceBook || !db.masterPriceBook[key]) return;
+    const item = db.masterPriceBook[key];
+    const newName = document.getElementById("masterEditNameInput").value.trim();
+    if (newName) item.name = newName;
+    item.price = Math.max(0, Math.round(Number(document.getElementById("masterEditPriceInput").value) || 0));
+    item.bind = Math.max(0, Math.round(Number(document.getElementById("masterEditBindInput").value) || 0));
+    item.qty = Math.max(1, Math.round(Number(document.getElementById("masterEditQtyInput").value) || 1));
+    item.star = Boolean(document.getElementById("masterEditStarInput").checked);
+    closeModal("masterCardEditModal");
+    await saveAll(true);
+    renderMasterPriceBoard();
+  }
+
+  async function updateMasterCardField(key, field, val) {
+    if (!db.masterPriceBook || !db.masterPriceBook[key]) return;
+    db.masterPriceBook[key][field] = val;
+    await saveAll(true);
+    renderMasterPriceBoard();
+  }
+
+  async function syncCurrentPoolPricesToMaster() {
+    const pool = getPool();
+    if (!db.masterPriceBook) db.masterPriceBook = buildDefaultMasterPriceBook(db.pools);
+    let count = 0;
+    (pool.cards || []).forEach(c => {
+      if (!c || !c.code) return;
+      const key = `${c.set || ""}::${c.code}`;
+      db.masterPriceBook[key] = {
+        set: c.set || "",
+        code: c.code,
+        name: c.name || "",
+        price: Number(c.price) || 0,
+        bind: Number(c.bind) || 0,
+        star: Boolean(c.star),
+        qty: Math.max(1, Number(c.qty) || 1)
+      };
+      count++;
+    });
+    await saveAll(true);
+    renderMasterPriceBoard();
+    alert(`已將目前盤面「${pool.name}」共 ${count} 張卡片設定寫入全圖鑑基準盤！`);
+  }
+
+  async function applyMasterPricesToCurrentPool() {
+    const pool = getPool();
+    if (!db.masterPriceBook) db.masterPriceBook = buildDefaultMasterPriceBook(db.pools);
+    if (!confirm(`確定要把「全圖鑑買賣價格基準表」的價格／綁物／熱卡套用到目前盤面「${pool.name}」嗎？`)) return;
+    let count = 0;
+    (pool.cards || []).forEach(c => {
+      const m = getMasterEntry(c.set, c.code);
+      if (m) {
+        c.price = Number(m.price) || 0;
+        c.bind = Number(m.bind) || 0;
+        c.star = Boolean(m.star);
+        if (m.name) c.name = m.name;
+        count++;
+      }
+    });
+    await saveAll(true);
+    renderAll();
+    alert(`已將基準表設定套用到目前盤面 ${count} 張卡片！`);
+  }
+
+  function openAddCardModal() {
+    const pool = getPool();
+    const setSel = document.getElementById("addCardSet");
+    const dynamicSets = Array.from(new Set([...SETS.filter(s => s !== "全部"), ...(pool.cards || []).map(c => c.set).filter(Boolean)]));
+    if (setSel) {
+      setSel.innerHTML = dynamicSets.map(s => `<option value="${escapeAttr(s)}">${escapeHtml(s)}</option>`).join("");
+      if (currentSetFilter !== "全部" && dynamicSets.includes(currentSetFilter)) {
+        setSel.value = currentSetFilter;
+      } else if (dynamicSets.includes("第六彈")) {
+        setSel.value = "第六彈";
+      }
+    }
+    document.getElementById("addCardCode").value = "";
+    document.getElementById("addCardName").value = "";
+    document.getElementById("addCardPrice").value = "0";
+    document.getElementById("addCardBind").value = "0";
+    document.getElementById("addCardQty").value = "1";
+    document.getElementById("addCardStar").checked = false;
+    document.getElementById("addCardModal").classList.add("open");
+  }
+
+  async function confirmAddCard() {
+    const pool = getPool();
+    const set = document.getElementById("addCardSet").value;
+    const code = document.getElementById("addCardCode").value.trim() || "NEW";
+    const name = document.getElementById("addCardName").value.trim();
+    const price = Math.max(0, Math.round(Number(document.getElementById("addCardPrice").value) || 0));
+    const bind = Math.max(0, Math.round(Number(document.getElementById("addCardBind").value) || 0));
+    const qty = Math.max(1, Math.round(Number(document.getElementById("addCardQty").value) || 1));
+    const star = document.getElementById("addCardStar").checked;
+    if (!name) return alert("請填寫卡片名稱！");
+
+    pool.cards.push({
+      id: "card_" + Date.now() + "_" + Math.random().toString(36).slice(2, 5),
+      set,
+      code,
+      name,
+      price,
+      bind,
+      star,
+      qty
+    });
+    closeModal("addCardModal");
+    await saveAll(true);
+    renderAll();
+  }
+
+  function copyPoolSummary() {
+    const pool = getPool();
+    const lines = [
+      `🌷 ${pool.name} 喊單公告`,
+      `順位判定：單張排卡｜紅字🔒 ＞ 金額高 ＞ 數量多 ＞ 先喊`,
+      `盲包/抽抽樂為獨立加購；總金額超過 $2,000 需付 50% 訂金；整盤 80% 未售出全盤失敗。`,
+      `目前卡項共 ${(pool.cards || []).length} 款。`
+    ];
+    copyTextSafe(lines.join("\n"), "已複製全盤公告！");
+  }
+
+  async function resetCurrentPoolOrders() {
+    const pool = getPool();
+    if (!confirm(`確定要清空「${pool.name}」的全部喊單紀錄嗎？`)) return;
+    pool.orders = [];
+    pool.statusMap = {};
+    pool.failed80 = false;
+    await saveAll(true);
+    renderAll();
+  }
+
+  async function deleteCurrentPool() {
+    if (db.pools.length <= 1) return alert("至少要保留一個盤面！");
+    const pool = getPool();
+    if (!confirm(`確定要刪除「${pool.name}」嗎？`)) return;
+    db.pools = db.pools.filter(p => p.id !== pool.id);
+    db.activePoolId = db.pools[0].id;
+    await saveAll(true);
+    renderAll();
+  }
+
+  function compressImageFile(file, maxSide = 1000, quality = 0.68) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+          let { width, height } = img;
+          if (width > maxSide || height > maxSide) {
+            if (width >= height) {
+              height = Math.round((height * maxSide) / width);
+              width = maxSide;
+            } else {
+              width = Math.round((width * maxSide) / height);
+              height = maxSide;
+            }
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL("image/jpeg", quality));
+        };
+        img.onerror = reject;
+        img.src = reader.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function uploadSetBanner(input) {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    const setName = document.getElementById("adminSetBannerSelect").value;
+    try {
+      const compressedDataUrl = await compressImageFile(file, 1000, 0.68);
+      const pool = getPool();
+      if (!pool.setBanners) pool.setBanners = {};
+      pool.setBanners[setName] = compressedDataUrl;
+      await saveAll(true);
+      renderSetBanner();
+      alert(`已壓縮並更新「${setName}」整彈大圖！`);
+    } catch (_) {
+      alert("圖片處理失敗，請換一張圖片再試。");
+    } finally {
+      input.value = "";
+    }
+  }
+
+  async function clearSetBanner() {
+    const setName = document.getElementById("adminSetBannerSelect").value;
+    const pool = getPool();
+    if (pool.setBanners && pool.setBanners[setName]) {
+      delete pool.setBanners[setName];
+      await saveAll(true);
+      renderSetBanner();
+    }
+  }
+
+  function syncAdminSetDropdowns() {
+    const pool = getPool();
+    const dynamicSets = Array.from(new Set([...SETS.filter(s => s !== "全部"), ...(pool.cards || []).map(c => c.set).filter(Boolean)]));
+    const bulkSel = document.getElementById("bulkTargetSet");
+    if (bulkSel) {
+      const prev = bulkSel.value;
+      bulkSel.innerHTML = `<option value="ALL">本盤全部卡片</option>` + dynamicSets.map(s => `<option value="${escapeAttr(s)}">${escapeHtml(s)}</option>`).join("");
+      if (prev && (prev === "ALL" || dynamicSets.includes(prev))) bulkSel.value = prev;
+    }
+    const bannerSel = document.getElementById("adminSetBannerSelect");
+    if (bannerSel) {
+      const prev = bannerSel.value;
+      bannerSel.innerHTML = dynamicSets.map(s => `<option value="${escapeAttr(s)}" ${s === "第六彈" && !prev ? "selected" : ""}>${escapeHtml(s)}</option>`).join("");
+      if (prev && dynamicSets.includes(prev)) bannerSel.value = prev;
+    }
+  }
+
+  function loadAdminInputs() {
+    syncAdminSetDropdowns();
+    const pool = getPool();
+    const c = pool.contact || {};
+    document.getElementById("contactLineInput").value = c.line || "";
+    document.getElementById("contactSocialInput").value = c.social || "";
+    document.getElementById("contactOtherInput").value = c.other || "";
+    document.getElementById("contactNoteInput").value = c.note || "";
+    document.getElementById("redCodesInput").value = (pool.redCodes || []).join(", ");
+  }
+
+  async function saveContactInfo() {
+    const pool = getPool();
+    pool.contact = {
+      line: document.getElementById("contactLineInput").value.trim(),
+      social: document.getElementById("contactSocialInput").value.trim(),
+      other: document.getElementById("contactOtherInput").value.trim(),
+      note: document.getElementById("contactNoteInput").value.trim()
+    };
+    await saveAll(true);
+    renderBannerAndStats();
+    alert("已儲存聯絡方式！");
+  }
+
+  async function saveRedCodes() {
+    const pool = getPool();
+    const raw = document.getElementById("redCodesInput").value;
+    pool.redCodes = raw.split(/[,，\s]+/).map(s => s.trim()).filter(Boolean);
+    await saveAll(true);
+    renderAll();
+  }
+
+  // 計算未讀訊息數量並更新紅點徽章
+  function updateUnreadBadges() {
+    const pool = getPool();
+    const chats = pool.chats || {};
+
+    // 買家未讀數（老闆傳給該買家、且 readByBuyer !== true）
+    const typedPhone = validatePhone(document.getElementById("buyerPhoneInput")?.value || "").clean;
+    const activeBuyerPhone = typedPhone || currentBuyerChatPhone;
+    let buyerUnread = 0;
+    if (activeBuyerPhone && chats[activeBuyerPhone]) {
+      buyerUnread = chats[activeBuyerPhone].filter(m => m.sender === "admin" && !m.readByBuyer).length;
+    }
+
+    ["buyerBarUnreadBadge", "dockUnreadBadge"].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = String(buyerUnread);
+      el.style.display = buyerUnread > 0 ? "inline-block" : "none";
+    });
+
+    // 老闆未讀數（所有買家傳給老闆、且 readByAdmin !== true）
+    let adminUnread = 0;
+    Object.values(chats).forEach(msgs => {
+      adminUnread += (msgs || []).filter(m => m.sender === "buyer" && !m.readByAdmin).length;
+    });
+
+    ["adminHeaderUnreadBadge", "adminTabUnreadBadge"].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = String(adminUnread);
+      el.style.display = adminUnread > 0 ? "inline-block" : "none";
+    });
+  }
+
+  // 買家開啟聊天室（支援直接輸入電話切換，並自動把老闆訊息標記為「已讀」）
+  async function openBuyerPrivateChat() {
+    const check = validatePhone(document.getElementById("buyerPhoneInput").value);
+    if (check.valid) {
+      currentBuyerChatPhone = check.clean;
+    } else if (!currentBuyerChatPhone) {
+      const entered = prompt("請輸入你的 10 碼手機號碼以開啟專屬聊天室：", "");
+      if (entered === null) return;
+      const recheck = validatePhone(entered);
+      if (!recheck.valid) {
+        alert(recheck.msg);
+        return;
+      }
+      currentBuyerChatPhone = recheck.clean;
+      document.getElementById("buyerPhoneInput").value = recheck.clean;
+      syncBuyerStatus();
+    }
+
+    document.getElementById("buyerChatPhoneInput").value = currentBuyerChatPhone;
+    document.getElementById("buyerChatModal").classList.add("open");
+    await loadAndMarkBuyerChatRead(currentBuyerChatPhone);
+  }
+
+  async function switchBuyerChatPhone() {
+    const check = validatePhone(document.getElementById("buyerChatPhoneInput").value);
+    if (!check.valid) {
+      alert(check.msg);
+      return;
+    }
+    currentBuyerChatPhone = check.clean;
+    document.getElementById("buyerPhoneInput").value = check.clean;
+    syncBuyerStatus();
+    await loadAndMarkBuyerChatRead(currentBuyerChatPhone);
+  }
+
+  async function loadAndMarkBuyerChatRead(phone) {
+    const pool = getPool();
+    const name = document.getElementById("buyerNameInput").value.trim() || phone;
+    document.getElementById("buyerChatTitle").textContent = `💬 個人專屬聊天室（${name}・${phone}）`;
+
+    const msgs = ((pool.chats || {})[phone]) || [];
+    let changed = false;
+    msgs.forEach(m => {
+      if (m.sender === "admin" && !m.readByBuyer) {
+        m.readByBuyer = true;
+        m.readByBuyerAt = new Date().toLocaleTimeString("zh-TW", { hour12: false });
+        changed = true;
+      }
+    });
+
+    renderBuyerChatMessages(pool, phone);
+    updateUnreadBadges();
+    if (changed) {
+      await saveAll(true);
+      if (isAdminAuthed && currentMode === "admin") renderAdminDm();
+    }
+  }
+
+  function renderBuyerChatMessages(pool, phoneKey) {
+    const msgs = ((pool.chats || {})[phoneKey]) || [];
+    const box = document.getElementById("buyerChatMessages");
+    box.innerHTML = msgs.length
+      ? msgs.map(m => {
+          const isMine = m.sender !== "admin";
+          const readTag = isMine
+            ? (m.readByAdmin
+                ? `<span class="read-tag-yes">✓✓ 老闆已讀${m.readByAdminAt ? ` ${escapeHtml(m.readByAdminAt)}` : ""}</span>`
+                : `<span class="read-tag-no">未讀</span>`)
+            : "";
+          return `
+            <div class="dm-msg ${m.sender === "admin" ? "admin" : "buyer"}">
+              <div>${escapeHtml(m.text)}</div>
+              <div class="dm-meta">
+                <span>${m.sender === "admin" ? "老闆" : escapeHtml(m.senderName || "買家")}・${escapeHtml(m.time || "")}</span>
+                ${readTag}
+              </div>
+            </div>
+          `;
+        }).join("")
+      : `<div style="color:var(--text-muted);font-size:12px;">尚無訊息，輸入內容開始私訊。</div>`;
+    box.scrollTop = box.scrollHeight;
+  }
+
+  async function sendBuyerDm() {
+    const check = validatePhone(document.getElementById("buyerChatPhoneInput").value || document.getElementById("buyerPhoneInput").value);
+    const input = document.getElementById("buyerChatInput");
+    const text = input.value.trim();
+    if (!check.valid) {
+      alert(check.msg);
+      return;
+    }
+    if (!text) return;
+    const phone = check.clean;
+    currentBuyerChatPhone = phone;
+    const pool = getPool();
+    if (!pool.chats) pool.chats = {};
+    if (!pool.chats[phone]) pool.chats[phone] = [];
+    const name = document.getElementById("buyerNameInput").value.trim() || phone;
+    pool.chats[phone].push({
+      id: "msg_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+      sender: "buyer",
+      senderName: name,
+      text,
+      time: new Date().toLocaleTimeString("zh-TW", { hour12: false }),
+      readByAdmin: false,
+      readByBuyer: true
+    });
+    input.value = "";
+    await saveAll(true);
+    renderBuyerChatMessages(pool, phone);
+    updateUnreadBadges();
+    if (isAdminAuthed) renderAdminDm();
+  }
+
+  // 後台聊天室：選取對話時自動將買家訊息標記為「已讀」並顯示買家是否已讀老闆訊息
+  async function renderAdminDm(markRead = false) {
+    const pool = getPool();
+    const chats = pool.chats || {};
+    const keys = Object.keys(chats);
+    const listBox = document.getElementById("adminDmThreadList");
+
+    if (!keys.length) {
+      listBox.innerHTML = `<div style="color:var(--text-muted);font-size:12px;">尚無買家私訊紀錄。</div>`;
+      document.getElementById("adminDmHeader").textContent = "目前尚無買家私訊";
+      document.getElementById("adminDmMessages").innerHTML = "";
+      updateUnreadBadges();
+      return;
+    }
+
+    if (!activeAdminDmKey || !chats[activeAdminDmKey]) activeAdminDmKey = keys[0];
+
+    let changed = false;
+    if (markRead && activeAdminDmKey && chats[activeAdminDmKey]) {
+      chats[activeAdminDmKey].forEach(m => {
+        if (m.sender === "buyer" && !m.readByAdmin) {
+          m.readByAdmin = true;
+          m.readByAdminAt = new Date().toLocaleTimeString("zh-TW", { hour12: false });
+          changed = true;
+        }
+      });
+    }
+
+    listBox.innerHTML = keys.map(k => {
+      const matchingOrders = (pool.orders || []).filter(o => normalizePhone(o.phone) === k);
+      const ord = matchingOrders.length ? matchingOrders[matchingOrders.length - 1] : null;
+      const label = ord ? `${ord.name} (${k})` : k;
+      const unreadCount = (chats[k] || []).filter(m => m.sender === "buyer" && !m.readByAdmin).length;
+      const badge = unreadCount > 0 ? `<span class="unread-badge">${unreadCount}</span>` : "";
+      return `<button class="dm-thread-btn ${k === activeAdminDmKey ? "active" : ""}" onclick="selectAdminDm('${escapeAttr(k)}')"><span>${escapeHtml(label)}</span>${badge}</button>`;
+    }).join("");
+
+    document.getElementById("adminDmHeader").textContent = `目前對話：${activeAdminDmKey}`;
+    const msgs = chats[activeAdminDmKey] || [];
+    const msgBox = document.getElementById("adminDmMessages");
+    msgBox.innerHTML = msgs.map(m => {
+      const isMine = m.sender === "admin";
+      const readTag = isMine
+        ? (m.readByBuyer
+            ? `<span class="read-tag-yes">✓✓ 買家已讀${m.readByBuyerAt ? ` ${escapeHtml(m.readByBuyerAt)}` : ""}</span>`
+            : `<span class="read-tag-no">未讀</span>`)
+        : "";
+      return `
+        <div class="dm-msg ${m.sender === "admin" ? "admin" : "buyer"}">
+          <div>${escapeHtml(m.text)}</div>
+          <div class="dm-meta">
+            <span>${m.sender === "admin" ? "老闆" : escapeHtml(m.senderName || "買家")}・${escapeHtml(m.time || "")}</span>
+            ${readTag}
+          </div>
+        </div>
+      `;
+    }).join("");
+    msgBox.scrollTop = msgBox.scrollHeight;
+    updateUnreadBadges();
+
+    if (changed) {
+      await saveAll(true);
+    }
+  }
+
+  async function selectAdminDm(k) {
+    activeAdminDmKey = k;
+    await renderAdminDm(true);
+  }
+
+  async function sendAdminDm() {
+    if (!activeAdminDmKey) return;
+    const input = document.getElementById("adminDmInput");
+    const text = input.value.trim();
+    if (!text) return;
+    const pool = getPool();
+    if (!pool.chats[activeAdminDmKey]) pool.chats[activeAdminDmKey] = [];
+    pool.chats[activeAdminDmKey].push({
+      id: "msg_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+      sender: "admin",
+      text,
+      time: new Date().toLocaleTimeString("zh-TW", { hour12: false }),
+      readByAdmin: true,
+      readByBuyer: false
+    });
+    input.value = "";
+    await saveAll(true);
+    await renderAdminDm(true);
+  }
+
+  function openRulesModal() {
+    renderBannerAndStats();
+    document.getElementById("rulesModal").classList.add("open");
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).classList.remove("open");
+  }
+
+  function escapeHtml(str) {
+    return String(str ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function escapeAttr(str) {
+    return escapeHtml(str).replace(/'/g, "&#39;");
+  }
+
+  function renderAll() {
+    renderPoolTabs();
+    renderBannerAndStats();
+    renderSetChips();
+    renderCards();
+    updateCartDock();
+    syncBuyerStatus();
+    updateUnreadBadges();
+    if (currentMode === "queue") {
+      renderQueueTable();
+      renderBuyerSummary();
+    }
+    if (currentMode === "master") {
+      renderMasterPriceBoard();
+    }
+    if (currentMode === "admin" && isAdminAuthed) {
+      loadAdminInputs();
+      renderAdminFailed80Badge();
+      renderAdminFinalWinners();
+      renderAdminCards();
+      renderAdminOrders();
+      renderAdminDm(false);
+    }
+  }
+
+  loadLocal();
+  renderAll();
+  syncFromCloud(false);
+</script>
+</body>
+</html>
